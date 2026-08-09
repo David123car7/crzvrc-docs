@@ -1,0 +1,10 @@
+# Configuration 
+
+The `SS_Config` class acts as the core configuration file for the Security System. It stores the global constants that define player capacities and the different security tier levels used throughout the system's logic. 
+
+If you need to increase the maximum number of players the system can track or reference the security levels in your own custom Udon scripts, you will find those values defined here.
+
+*   **`PLAYER_CAPACITY`**: Defines the maximum number of players the security system can track and synchronize. The default is `5`. **Note:** If your VRChat world allows for more than 5 players, you must increase this integer to match, your world's maximum instance capacity to prevent errors.
+*   **`SECURITY_LEVEL_NONE`** (`-1`): The default state. Represents a standard player with no security privileges.
+*   **`SECURITY_LEVEL_TEMPORARY`** (`0`): Represents a player who has been granted temporary security access during the active instance (for example, a normal player promoted by another security member).
+*   **`SECURITY_LEVEL_PERMANENT`** (`1`): Represents a player with high-level, permanent security access (such as the Instance Owner, or a user whose name is hardcoded in the Inspector or fetched from your online URL).

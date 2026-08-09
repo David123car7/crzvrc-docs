@@ -3,6 +3,7 @@
   "position": 3,
   "link": {
     "type": "generated-index",
-    "description": "Notification System description"
+    "description": "The Notification System is designed to manage and queue in-game player alerts. It acts as a centralized component, providing an interface for other Udon scripts to trigger notifications."
+
   }
 }

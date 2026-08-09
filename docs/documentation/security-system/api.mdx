@@ -1,0 +1,65 @@
+# API Reference
+
+The Security System provides a set of public methods allowing external Udon scripts to interact with the security system. 
+
+Below are the primary methods available to developers.
+
+---
+
+## Methods
+
+### `SetPlayerSecurityLevel`
+
+Updates a player's security level 
+
+`public void SetPlayerSecurityLevel(int playerId, sbyte level)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `playerId` | `int` | The ID of the player whose security level will be updated. |
+| `level` | `sbyte` | The security level to assign. |
+
+---
+
+### `SetPlayerVerified`
+
+Updates a non-security player's verification state 
+
+`public void SetPlayerVerified(int playerId, bool state)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `playerId` | `int` | The ID of the player whose verification state will be updated. |
+| `state` | `bool` | The verification state to assign. |
+
+---
+
+### `SetSecurity`
+
+Enables or disables security mode and updates verification for players without security privileges.
+
+`public void SetSecurity(bool state)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `state` | `bool` | `true` to enable security mode; otherwise, `false`. |
+
+---
+
+### `SetPlayersListSortMode`
+
+Sets the player-list sort mode and reorders synchronized player data
+
+`public void SetPlayersListSortMode(bool state)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `state` | `bool` | `true` to sort alphabetically; `false` to sort by most recent join time. |

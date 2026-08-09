@@ -71,12 +71,6 @@ const config: Config = {
       items: [
         {
           type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
-          position: 'left',
-          label: 'Tutorial',
-        },
-        {
-          type: 'docSidebar',
           sidebarId: 'docsSidebar',
           position: 'left',
           label: 'Docs',
@@ -98,6 +92,10 @@ const config: Config = {
               label: 'Jinxxy',
               href: 'https://jinxxy.com/CrZ3d',
             },
+            {
+              label: 'Booth',
+              href: 'https://crz3d.booth.pm/',
+            }
           ],
         },
         {

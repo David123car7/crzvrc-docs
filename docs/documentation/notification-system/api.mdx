@@ -1,0 +1,35 @@
+# API Reference
+
+The Notification System is built to be easily controlled via external Udon scripts. Below are the primary methods you can call to interact with the system, as well as the configuration file used to manage queue limits.
+
+---
+
+## Methods
+
+### `AddNotification`
+
+Adds a notification to the queue and begins playback when the system is idle.
+
+`public void AddNotification(string text, Color textColor, string subText, Color subTextColor, Sprite sprite, Color spriteColor)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `text` | `string` | Primary message shown in the notification. |
+| `textColor` | `Color` | Color applied to the primary message. |
+| `subText` | `string` | Secondary message shown below the primary message. |
+| `subTextColor` | `Color` | Color applied to the secondary message. |
+| `sprite` | `Sprite` | Icon displayed with the notification. |
+| `spriteColor` | `Color` | Tint applied to the notification icon. |
+
+---
+
+### `ResetNotification`
+
+Stops and resets the active notification flow.
+
+`public void ResetNotification()`
+
+**Usage:**
+Call this method if you need to immediately clear the screen of any active notifications, such as during a critical game reset or when a player leaves a specific zone.
