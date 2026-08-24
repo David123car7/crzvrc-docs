@@ -1,0 +1,39 @@
+---
+sidebar_position: 4
+---
+
+# Configuring the Settings Menu
+
+The Room System includes a built-in settings menu allowing users to toggle specific features within the room they are in room. By default, the system comes with two built-in toggles: one for GameObjects and one for Colliders. 
+
+You can also easily expand this menu to trigger your own custom Udon events (such as turning on a TV, changing lighting, or enabling a mirror).
+
+---
+
+## Built-In Settings (Objects & Colliders)
+
+To use the default toggles, you need to configure the `_roomSettings` GameObject in your room prefab.
+
+1. **Select `_roomSettings`:** Locate this GameObject within your specific room's hierarchy.
+2. **Assign Objects:** In the Inspector, find the `objectsToToggle` array and drag in any GameObjects you want the room owner to toggle on or off.
+3. **Assign Colliders:** Find the `collidersToToggle` array and drag in any Colliders you want to be able to enable or disable.
+4. **Set Default State:** You can adjust the `togglesDefaultState` checkbox to determine if these objects and colliders should start as active or inactive when the room initializes.
+
+---
+
+## Adding Custom Settings
+
+If you want to add new buttons to the settings menu to control your own scripts, the `RS_RoomSettings` script handles this through the "Custom Client Buttons" arrays.
+
+### Step-by-Step Customization
+
+1. **Update the Config Limit:** First, remember that the total number of custom settings allowed is dictated by `RS_Config.ROOM_SETTINGS`. If you need more buttons, increase that constant in the config file first.
+2. **Assign the Script:** On the `_roomSettings` GameObject, expand the `scripts` array and drag in the GameObject containing the `UdonBehaviour` you want to interact with.
+3. **Define the Event:** In the `events` array, type the exact string name of the custom event (method) you want to trigger on that script. When the button is clicked, the system will call `PlayCustomEvent` to execute it.
+4. **Set the UI Label:** Finally, in the `eventsLabels` array, type the text you want to appear on the UI button for this specific setting.
+
+:::warning 
+When adding custom settings, it is crucial that the index numbers match perfectly across all three arrays (`scripts`, `events`, and `eventsLabels`). 
+
+For example, the script assigned to **Index 0** must have its corresponding event name typed into **Index 0** of the events array, and its UI text typed into **Index 0** of the labels array. Mixing these up will break your settings, causing buttons to trigger the wrong scripts or display the wrong text!
+:::

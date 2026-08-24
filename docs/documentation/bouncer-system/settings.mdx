@@ -1,17 +1,17 @@
 # Settings 
 
-The Security System is highly customizable directly from the Unity Inspector. By adjusting the settings on the main Security System prefab, you can tailor exactly how the system reacts when players are granted or denied access. 
+The Bouncer System is highly customizable directly from the Unity Inspector. By adjusting the settings on the main Bouncer System prefab, you can tailor exactly how the system reacts when players are granted or denied access.
 
 Below is a complete breakdown of all the available configuration options.
 
 ---
 
-## Core Security Toggles
+## Core Bouncer Toggles
 
 These settings dictate the foundational behavior and default states of your security environment.
 
 *   **`Fetch Security Names`**: When enabled, the system will dynamically pull the list of authorized security personnel from an online URL (such as a raw Pastebin link). This allows you to update your security staff remotely without needing to re-upload your VRChat world! If disabled, you will need to manually input the security names directly into the Unity Inspector.
-*   **`Is Security On`**: This networked (UdonSynced) setting determines the default state of the system when a new instance of your world is generated. If enabled, the security system is active immediately upon world creation. If disabled, it starts offline until a security member turns it on.
+*   **`Is Security On`**: This networked (UdonSynced) setting determines the default state of the system when a new instance of your world is generated. If enabled, the Bouncer System is active immediately upon world creation. If disabled, it starts offline until a security member turns it on.
 *   **`Instance Owner Is Security`**: When enabled, the player who created the instance (the instance owner) is automatically granted the Security role, regardless of whether their name is on the security list.
 
 ---
@@ -21,7 +21,7 @@ These settings dictate the foundational behavior and default states of your secu
 Configure how the system communicates access changes to the players in the world.
 
 *   **`Security Animation`**: If enabled, the system will play a specific animation whenever a user gains or loses access. This is highly recommended if you are using the system as a physical "Security Gate" or bouncer system, as it provides clear visual feedback to the players.
-*   **`Enable Notifications`**: When enabled, the Security System will automatically trigger on-screen alerts during access changes. 
+*   **`Enable Notifications`**: When enabled, the Bouncer System will automatically trigger on-screen alerts during access changes.
 
 :::info 
 The **Enable Notifications** feature will only function if you also have the **CrZVRC Notification System** asset installed.
@@ -37,4 +37,3 @@ You can configure the system to physically move players around your world based 
 *   **`Verified Position`**: The exact Transform (coordinates and rotation) where the player will be sent if `Teleport When Verified` is enabled.
 *   **`Teleport When Unverified`**: If enabled, a player will be immediately teleported away if their access is revoked by a security member.
 *   **`Reset Position`**: The Transform (coordinates and rotation) representing the fallback or "kicked" location. This is where players are sent when their access is revoked or reset.
-

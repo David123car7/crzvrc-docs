@@ -1,8 +1,0 @@
-{
-  "label": "Security System",
-  "position": 4,
-  "link": {
-    "type": "generated-index",
-    "description": "The Security System is a dynamic, role-based access control framework. It allows authorized players to manage world permissions in real-time and triggers customizable, event-driven responses based on role changes."
-  }
-}

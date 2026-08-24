@@ -1,0 +1,38 @@
+---
+sidebar_position: 2
+---
+
+# Configuration
+
+The core settings for the Room System are managed inside the `RS_Config` script. This file stores the global constants that define the capacities and limits for your rooms, UI queues, and the world itself. 
+
+If you need to adjust the maximum number of players allowed in a room, or increase the world capacity limit to match your VRChat instance settings, you will modify these values directly within the `RS_Config` script.
+
+---
+
+## Constants Overview
+
+*   **`WORLD_MAX_CAPACITY`** (Default: `12`): Defines the maximum number of players your VRChat world can hold. 
+
+    **Important:** You must ensure this number matches your world's maximum instance capacity (including extra capacity) to prevent synchronization errors across clients.
+*   **`ROOM_MAX_CAPACITY`** (Default: `8`): The maximum number of players that can be tracked, invited, or granted access to a single room at any given time. 
+*   **`ROOM_MAX_NOTIFICATIONS`** (Default: `6`): The maximum number of intercom rings that a room's queue can hold before it stops accepting new ones.
+*   **`ROOM_SETTINGS`** (Default: `2`): The number of custom toggleable settings tracked by the room system's state. Increase this if you plan to add more custom toggles (like adjusting lights, mirrors, or media players) to the room's UI.
+
+---
+
+## Room Positioning
+
+To ensure players are teleported and managed correctly when entering or exiting from a room, you must configure the teleport targets on the room's parent GameObject. 
+
+Select the main **RoomSystem** GameObject in your hierarchy and adjust these two Transforms in the Inspector:
+*   **`insideRoomPositiom`**: Move this Transform to the exact location inside the room where you want players to appear.
+*   **`outsideRoomPositiom`**: Move this Transform to a location outside the room (such as a hallway or lobby). This is where unauthorized players will be teleported if they are kicked or fail an access check.
+
+---
+
+## Sound Effects
+
+If you want to swap out the default audio clips to better match the atmosphere of your world, you can change the sound effects directly on their respective GameObjects:
+*   **Intercom Sounds:** Locate and select the **`_intercom`** GameObject in your room's hierarchy to change the ringing or notification audio.
+*   **Camera Sounds:** Locate and select the **`_selfieCamera`** GameObject to adjust the sound effects triggered by the room's security camera.

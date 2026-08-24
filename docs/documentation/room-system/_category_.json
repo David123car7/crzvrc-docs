@@ -1,0 +1,8 @@
+{
+  "label": "Room System",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "A room system to create and manage rooms, allowing players to claim private spaces, lock doors, and manage the room within your VRChat world."
+  }
+}
