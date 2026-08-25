@@ -1,0 +1,8 @@
+{
+  "label": "Bag Toss Game",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "The Bag Toss is mini-game for your world. Players throw a bag at a board, and depending on where it lands, a specific text prompt is revealed. If it hits a designated target on the board, it displays a sentence pulled from your custom list. If the player scores a perfect shot into the hole, a special customizable message appears!"
+  }
+}

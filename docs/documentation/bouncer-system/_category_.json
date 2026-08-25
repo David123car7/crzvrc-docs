@@ -1,6 +1,6 @@
 {
   "label": "Bouncer System",
-  "position": 4,
+  "position": 7,
   "link": {
     "type": "generated-index",
     "description": "⚠️ **WARNING: This product is not released yet!** ⚠️\n\nThe Bouncer System is an access-control framework that allows authorized players to verify or unverify users in real time, easily managing world permissions and granting access to exclusive areas."

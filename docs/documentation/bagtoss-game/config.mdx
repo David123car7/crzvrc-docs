@@ -1,0 +1,15 @@
+# Configuration 
+
+You can easily load your own list of sentences into the game using Pastebin. This allows you to update the game's text dynamically over the internet without needing to re-upload your VRChat world! 
+
+To set this up, select the **BagTossGame** GameObject in your scene hierarchy and locate the `BS_GameManagement` script in the Inspector.
+
+*   **Create a List:** Go to Pastebin and create a new paste containing all the sentences you want to use, placing each sentence on a new line.
+*   **Get the Raw Link:** Once saved, click the **Raw** button on your Pastebin page. 
+*   **Copy the URL:** Copy the URL from your browser's address bar (it should look something like `https://pastebin.com/raw/...`).
+*   **Link it to Unity:** Paste this raw URL into the **Sentences List Url** field on the `BS_GameManagement` script.
+
+Because your sentences are pulled from a live link, you can tell the game how often it should check your Pastebin for new updates.
+
+*   **Reload Delay:** In the `BS_GameManagement` script, locate the **Reload Delay** field.
+*   **Set the Time:** Enter a value in seconds. For example, entering `600` will command the system to re-fetch the sentence list every 10 minutes.

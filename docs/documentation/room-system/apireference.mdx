@@ -1,0 +1,46 @@
+---
+sidebar_position: 5
+---
+
+# API Reference 
+
+The `RS_RoomSystem` script is the core script for each individual room. 
+
+Below is a reference for the primary public methods available in `RS_RoomSystem`, useful if you want to integrate your own custom scripts with the Room System.
+
+---
+
+## Core Methods
+
+These methods handle the initialization, reset, and network synchronization of the room state.
+
+*   **`Initialize(byte roomNumber, RS_ConfigUI configUI)`:** Initializes this room's synchronized state, player list, and associated user interfaces.
+*   **`Reset()`:** Restores the room's networked settings and player list to their default empty state.
+*   **`SyncRoomSystem()`:** Updates the room UI from the current state and teleports the local player when their room membership changes.
+
+---
+
+## Getters 
+
+Use these methods to read the current state of a room without modifying it.
+
+*   **`GetIsLocked()`:** Gets whether the room is locked, returning `true` when new entry to the room is locked.
+*   **`GetIsAnon()`:** Gets whether player names are hidden in the room UI, returning `true` when anonymous mode is enabled.
+*   **`GetIsNotDisturb()`:** Gets whether the room's do-not-disturb mode is enabled.
+*   **`GetEnteredRoom()`:** Gets whether the local player is currently considered inside this room.
+*   **`GetPlayersCount()`:** Gets the number of players currently assigned to this room.
+*   **`IsPlayerInRoom(int playerId)`:** Checks whether a player is listed as a member of this room. It returns `true` if the player is in the room, and `false` otherwise.
+
+---
+
+## Setters & Actions (Networked)
+
+These methods allow you to modify the room's state. Because the Room System relies on manual sync mode, most of these methods will automatically claim network ownership, update the variables, and request serialization across the network.
+
+*   **`SetIsLocked(bool state)`:** Sets the room lock state, claims ownership, and synchronizes the change.
+*   **`SetIsAnon(bool state)`:** Sets anonymous mode, claims ownership, and synchronizes the change.
+*   **`SetIsNotDisburb(bool state)`:** Sets do-not-disturb mode, claims ownership, and synchronizes the change.
+*   **`SetRoomText(string text)`:** Sets the room's displayed text, claims ownership, and synchronizes the change.
+*   **`SetRoomNumber(byte value)`:** Sets this room's local identifier.
+*   **`AddPlayer(int playerId)`:** Adds a player to the room, updates the player count, and synchronizes the change.
+*   **`RemovePlayer(int playerId)`:** Removes a player from the room and resets dependent systems when the room becomes empty.
