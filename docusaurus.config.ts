@@ -76,10 +76,15 @@ const config: Config = {
           label: 'Docs',
         },
         {
-          type: 'docSidebar',
-          sidebarId: 'tosSidebar',
+          to: '/docs/tos/',
+          activeBaseRegex: '^/crzvrc-docs/docs/tos/?$',
           position: 'left',
           label: 'Terms of Service',
+        },
+        {
+          to: '/docs/tos/privacy-policy',
+          position: 'left',
+          label: 'Privacy Policy',
         },
         {
           href: 'https://github.com/David123car7/crzvrc-docs',
