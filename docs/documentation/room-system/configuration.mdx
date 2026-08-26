@@ -37,25 +37,9 @@ If you want to swap out the default audio clips to better match the atmosphere o
 *   **Intercom Sounds:** Locate and select the **`_intercom`** GameObject in your room's hierarchy to change the ringing or notification audio.
 *   **Camera Sounds:** Locate and select the **`_selfieCamera`** GameObject to adjust the sound effects triggered by the room's security camera.
 
----
-
-## Notification System Integration
-
-If you want your Room System to send global alerts (such as intercom rings or access denied messages), you can easily hook it up to the CrZVRC Notification System.
-
-To enable this integration:
-
-1. **Import the Package:** Ensure you have downloaded and imported the **Notification System** Unity package into your project.
-2. **Place the Prefab:** Drag and drop the **Notification System** prefab into your active scene hierarchy.
-3. **Link to the Manager:** Select the **Rooms Management** GameObject in your scene hierarchy. In the Unity Inspector, locate the Notification System reference field on its Udon script, and drag the newly placed Notification System prefab into it.
-
-Once linked, the Room System will automatically route intercom rings, denied entry warnings, and other relevant alerts directly through your world's notification UI!
-
----
-
 ### Customizing Notification Alerts
 
-Once the systems are linked, you can fully customize the look and text of these alerts directly on the **RoomsManagement** GameObject. Look for the `RS_NotificationConfig` script in the Inspector to modify the following settings:
+You can fully customize the look and text of these alerts directly on the **RoomsManagement** GameObject. Look for the `RS_NotificationConfig` script in the Inspector to modify the following settings:
 
 #### Deny User Notification
 This alert is sent to a player when the room owner explicitly denies their intercom request.
@@ -72,3 +56,8 @@ This alert is sent to the room owner(s) when someone rings their room from the o
 *   **Intercom Ring Sub Text Color:** The color of the secondary text (which typically displays the caller's name).
 *   **Intercom Ring Sprite:** The icon displayed next to the message.
 *   **Intercom Ring Sprite Color:** The color tint applied to the icon.
+
+> ⚠️ **Important Audio Note:**  
+> We recommend disabling the **Sound Effects** option on your Notification System prefab. If left enabled, the default notification alert sound will play simultaneously with the Room System's custom intercom ring audio, causing overlapping sounds.  
+> 
+> *Need sound effects for other systems?* If your world uses the notification system for other assets and requires audio alerts, simply place a second Notification System prefab in your hierarchy and assign it exclusively to the Room System with sound effects disabled.

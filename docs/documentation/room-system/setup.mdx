@@ -4,17 +4,28 @@ sidebar_position: 0
 
 # Setup
 
-Setting up the Room System in your VRChat world is quick and straightforward. Follow these steps to place the rooms in your world.
+Setting up the Room System and its required dependencies in your VRChat world is quick and straightforward. Follow these steps carefully to get everything running.
 
 ---
-1. **Import the Package:** Ensure you have successfully imported the Room System Unity package into your project.
-2. **Place Your Rooms:** Locate the **Room System** prefab in your project files. Drag and drop this prefab into your scene hierarchy. You need to do this for *every* room you want to create (e.g., if your world has 5 separate rooms, drag the prefab into the scene 5 times and position them accordingly).
-3. **Add the Rooms Manager:** Next, locate the **Rooms Management** prefab and drag a single instance of it into your scene. This prefab acts as the brain that coordinates all the individual rooms you just placed.
-4. **Link the Rooms to the Manager:** Select the **Rooms Management** prefab in your scene hierarchy. In the Unity Inspector, look for its Udon script. Drag and drop every single **Room System** prefab from your scene into the rooms array on this script. 
 
-    **Important:** Add the rooms in a logical, sequential order (for example, starting from the first room in a corridor and ending with the last). The system automatically assigns the room numbers based on the exact order they are placed in this list.
+1. **Import the Packages:** Ensure you have successfully downloaded and imported both the **Room System** package and the **Notification System** package into your project. *(Note: The Notification System is a mandatory dependency required for intercom rings and access denied alerts).*
 
-5. **Open the CrZVRC Tool:** Look at the very top toolbar of your Unity editor. Click on **CrZVRC** and select **Room System** from the dropdown menu.
-6. **Generate Render Textures:** A custom editor window will open. Simply click the **Generate Render Textures** button. 
-7. **Wait for Confirmation:** The tool will automatically configure the necessary render textures for your UI. Once it finishes, a small popup window will appear notifying you that the setup is complete!
+2. **Place the Notification System:** Locate the **Notification System** prefab in your project files and drag a single instance of it into your active scene hierarchy.
+
+3. **Place Your Rooms:** Locate the **Room System** prefab in your project files. Drag and drop this prefab into your scene hierarchy. You need to do this for *every* room you want to create (e.g., if your world has 5 separate rooms, drag the prefab into the scene 5 times and position them accordingly).
+
+4. **Add the Rooms Management:** Next, locate the **Rooms Management** prefab and drag a single instance of it into your scene. This prefab acts as the brain that coordinates all the individual rooms you just placed.
+
+5. **Link the Notification System & Rooms to the Manager:** Select the **Rooms Management** prefab in your scene hierarchy. In the Unity Inspector, look for its Udon script:
+   * Drag and drop your **Notification System** prefab into the Notification System reference slot.
+   * Drag and drop every single **Room System** prefab from your scene into the rooms array.
+   
+> 💡 **Important:** Add the rooms to the array in a logical, sequential order (for example, starting from the first room in a corridor and ending with the last). The system automatically assigns room numbers based on the exact order they are placed in this list.
+
+6. **Open the CrZVRC Tool:** Look at the very top toolbar of your Unity editor. Click on **CrZVRC** and select **Room System** from the dropdown menu.
+
+7. **Generate Render Textures:** A custom editor window will open. Simply click the **Generate Render Textures** button. 
+
+8. **Wait for Confirmation:** The tool will automatically configure the necessary render textures for your UI. Once it finishes, a small popup window will appear notifying you that the setup is complete!
+
 ---
