@@ -77,12 +77,11 @@ const config: Config = {
         },
         {
           to: '/docs/tos/',
-          activeBaseRegex: '^/crzvrc-docs/docs/tos/?$',
           position: 'left',
           label: 'Terms of Service',
         },
         {
-          to: '/docs/tos/privacy-policy',
+          to: '/docs/privacy-policy',
           position: 'left',
           label: 'Privacy Policy',
         },
