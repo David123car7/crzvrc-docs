@@ -36,14 +36,8 @@ const config: Config = {
   },
 
   plugins: [
-    [
-      'vercel-analytics',
-      {
-        debug: true,
-        mode: 'auto',
-      },
-    ],
-  ], 
+    '@docusaurus/plugin-vercel-analytics',
+  ],
 
   presets: [
     [
