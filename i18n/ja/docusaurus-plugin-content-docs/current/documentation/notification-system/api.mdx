@@ -1,0 +1,35 @@
+# API リファレンス
+
+Notification System は、外部の Udon スクリプトから簡単に制御できるように作られています。以下は、システムを操作するために呼び出せる主要なメソッドと、キューの上限を管理するために使用される設定ファイルです。
+
+---
+
+## メソッド
+
+### `AddNotification`
+
+通知をキューに追加し、システムがアイドル状態のときに再生を開始します。
+
+`public void AddNotification(string text, Color textColor, string subText, Color subTextColor, Sprite sprite, Color spriteColor)`
+
+**パラメーター:**
+
+| パラメーター | 型 | 説明 |
+| :--- | :--- | :--- |
+| `text` | `string` | 通知に表示されるメインメッセージ。 |
+| `textColor` | `Color` | メインメッセージに適用される色。 |
+| `subText` | `string` | メインメッセージの下に表示されるサブメッセージ。 |
+| `subTextColor` | `Color` | サブメッセージに適用される色。 |
+| `sprite` | `Sprite` | 通知とともに表示されるアイコン。 |
+| `spriteColor` | `Color` | 通知アイコンに適用される色合い。 |
+
+---
+
+### `ResetNotification`
+
+アクティブな通知フローを停止してリセットします。
+
+`public void ResetNotification()`
+
+**使用方法:**
+重要なゲームのリセット時や、プレイヤーが特定のゾーンから離れたときなど、アクティブな通知を画面からすぐにクリアする必要がある場合にこのメソッドを呼び出します。

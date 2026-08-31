@@ -1,0 +1,8 @@
+{
+  "label": "Bouncer System",
+  "position": 7,
+  "link": {
+    "type": "generated-index",
+    "description": "⚠️ **警告: この製品はまだリリースされていません！** ⚠️\n\nBouncer System はアクセス制御フレームワークであり、権限を持つプレイヤーがユーザーをリアルタイムで認証（verify）または認証解除（unverify）できます。ワールドの権限を簡単に管理し、限定エリアへのアクセスを許可できます。"
+  }
+}

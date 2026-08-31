@@ -1,0 +1,69 @@
+---
+sidebar_position: 3
+---
+
+# API リファレンス
+
+Bouncer System は、外部の Udon スクリプトが操作できるようにする一連のパブリックメソッドを提供します。
+
+以下は、開発者が利用できる主要なメソッドです。
+
+---
+
+## メソッド
+
+### `SetPlayerSecurityLevel`
+
+プレイヤーのセキュリティレベルを更新します。
+
+`public void SetPlayerSecurityLevel(int playerId, sbyte level)`
+
+**パラメーター:**
+
+| パラメーター | 型 | 説明 |
+| :--- | :--- | :--- |
+| `playerId` | `int` | セキュリティレベルを更新するプレイヤーの ID。 |
+| `level` | `sbyte` | 割り当てるセキュリティレベル。 |
+
+---
+
+### `SetPlayerVerified`
+
+セキュリティ権限を持たないプレイヤーの認証状態を更新します。
+
+`public void SetPlayerVerified(int playerId, bool state)`
+
+**パラメーター:**
+
+| パラメーター | 型 | 説明 |
+| :--- | :--- | :--- |
+| `playerId` | `int` | 認証状態を更新するプレイヤーの ID。 |
+| `state` | `bool` | 割り当てる認証状態。 |
+
+---
+
+### `SetSecurity`
+
+セキュリティモードを有効または無効にし、セキュリティ権限を持たないプレイヤーの認証状態を更新します。
+
+`public void SetSecurity(bool state)`
+
+**パラメーター:**
+
+| パラメーター | 型 | 説明 |
+| :--- | :--- | :--- |
+| `state` | `bool` | セキュリティモードを有効にする場合は `true`、それ以外の場合は `false`。 |
+
+---
+
+### `SetPlayersListSortMode`
+
+プレイヤーリストのソートモードを設定し、同期されたプレイヤーデータを並べ替えます。
+
+`public void SetPlayersListSortMode(bool state)`
+
+**パラメーター:**
+
+| パラメーター | 型 | 説明 |
+| :--- | :--- | :--- |
+| `state` | `bool` | アルファベット順にソートする場合は `true`、参加時刻が新しい順にソートする場合は `false`。 |

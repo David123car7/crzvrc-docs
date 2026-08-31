@@ -1,0 +1,9 @@
+{
+  "label": "Room System",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "ルームを作成・管理するためのルームシステムです。プレイヤーはプライベートな空間を確保し、ドアをロックし、VRChat ワールド内でルームを管理できます。"
+  }
+}
+

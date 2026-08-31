@@ -18,7 +18,7 @@ const config: Config = {
   url: 'https://docs.crzvrc.com',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '',
+  baseUrl: '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -32,7 +32,11 @@ const config: Config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en'],
+    locales: ['en', 'ja'],
+    localeConfigs: {
+      en: {label: 'English'},
+      ja: {label: '日本語'},
+    },
   },
 
   presets: [
@@ -88,6 +92,10 @@ const config: Config = {
         {
           href: 'https://github.com/David123car7/crzvrc-docs',
           label: 'GitHub',
+          position: 'right',
+        },
+        {
+          type: 'localeDropdown',
           position: 'right',
         },
       ],

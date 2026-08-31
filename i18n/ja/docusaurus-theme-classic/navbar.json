@@ -1,0 +1,26 @@
+{
+  "title": {
+    "message": "CrZVRC",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "Logo",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Docs": {
+    "message": "ドキュメント",
+    "description": "Navbar item with label Docs"
+  },
+  "item.label.Terms of Service": {
+    "message": "利用規約",
+    "description": "Navbar item with label Terms of Service"
+  },
+  "item.label.Privacy Policy": {
+    "message": "プライバシーポリシー",
+    "description": "Navbar item with label Privacy Policy"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  }
+}

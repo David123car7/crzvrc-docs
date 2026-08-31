@@ -1,0 +1,38 @@
+{
+  "link.title.Stores": {
+    "message": "ストア",
+    "description": "The title of the footer links column with title=Stores in the footer"
+  },
+  "link.title.Social": {
+    "message": "ソーシャル",
+    "description": "The title of the footer links column with title=Social in the footer"
+  },
+  "link.title.More": {
+    "message": "その他",
+    "description": "The title of the footer links column with title=More in the footer"
+  },
+  "link.item.label.Jinxxy": {
+    "message": "Jinxxy",
+    "description": "The label of footer link with label=Jinxxy linking to https://jinxxy.com/CrZ3d"
+  },
+  "link.item.label.Booth": {
+    "message": "Booth",
+    "description": "The label of footer link with label=Booth linking to https://crz3d.booth.pm/"
+  },
+  "link.item.label.Discord": {
+    "message": "Discord",
+    "description": "The label of footer link with label=Discord linking to https://discord.gg/3W7h3Bp3mH"
+  },
+  "link.item.label.Youtube": {
+    "message": "YouTube",
+    "description": "The label of footer link with label=Youtube linking to https://www.youtube.com/@CrZ3D"
+  },
+  "link.item.label.GitHub": {
+    "message": "GitHub",
+    "description": "The label of footer link with label=GitHub linking to https://github.com/David123car7"
+  },
+  "copyright": {
+    "message": "Copyright © 2026 CrZVRC, Inc. Built with Docusaurus.",
+    "description": "The footer copyright"
+  }
+}
