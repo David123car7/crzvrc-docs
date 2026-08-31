@@ -1,0 +1,42 @@
+{
+  "sidebar.docsSidebar.category.Room System": {
+    "message": "ルームシステム",
+    "description": "The label for category Room System in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Room System.link.generated-index.description": {
+    "message": "ルームを作成・管理するためのルームシステムです。プレイヤーはプライベートな空間を確保し、ドアをロックし、VRChat ワールド内でルームを管理できます。",
+    "description": "The generated-index page description for category Room System in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Spin Bottle Game": {
+    "message": "スピンボトルゲーム",
+    "description": "The label for category Spin Bottle Game in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Spin Bottle Game.link.generated-index.description": {
+    "message": "Spin the Bottle は、あなたのワールド向けのミニゲームです。プレイヤーがボトルを回し、最終的に止まると、文章を 1 つ選んで表示します。",
+    "description": "The generated-index page description for category Spin Bottle Game in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Bag Toss Game": {
+    "message": "バッグトスゲーム",
+    "description": "The label for category Bag Toss Game in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Bag Toss Game.link.generated-index.description": {
+    "message": "Bag Toss は、あなたのワールド向けのミニゲームです。プレイヤーはボードに向かってバッグを投げ、着地した場所に応じて特定のテキストプロンプトが表示されます。ボード上の指定されたターゲットに当たると、カスタムリストから引用された文章が表示されます。プレイヤーが穴に完璧なショットを決めると、カスタマイズ可能な特別なメッセージが表示されます！",
+    "description": "The generated-index page description for category Bag Toss Game in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Notification System": {
+    "message": "通知システム",
+    "description": "The label for category Notification System in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Notification System.link.generated-index.description": {
+    "message": "Notification System は、ゲーム内のプレイヤー向けアラートを管理およびキューイングするために設計されています。中央集約型のコンポーネントとして機能し、他の Udon スクリプトが通知をトリガーするためのインターフェースを提供します。",
+    "description": "The generated-index page description for category Notification System in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Bouncer System": {
+    "message": "バウンサーシステム",
+    "description": "The label for category Bouncer System in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Bouncer System.link.generated-index.description": {
+    "message": "⚠️ **警告: この製品はまだリリースされていません！** ⚠️\n\nBouncer System はアクセス制御フレームワークであり、権限を持つプレイヤーがユーザーをリアルタイムで認証（verify）または認証解除（unverify）できます。ワールドの権限を簡単に管理し、限定エリアへのアクセスを許可できます。",
+    "description": "The generated-index page description for category Bouncer System in sidebar docsSidebar"
+  }
+}
