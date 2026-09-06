@@ -1,0 +1,35 @@
+---
+sidebar_position: 1
+---
+
+# Configuration
+
+All of the main settings for the Members Board live on the **parent GameObject of the prefab**. Select it in your scene hierarchy and locate the `MB_MembersBoard` script in the Inspector. From here you control the board title, the optional tier system, and how the member list is fetched from Pastebin.
+
+Every field described on this page is defined in the `MB_MembersBoard` script, which you can open for reference.
+
+---
+
+## General Settings
+
+*   **`Board Tittle`**: The text displayed as the title at the top of the board UI.
+*   **`Tiers Enabled`**: Toggles the tier system. When enabled, the Members Board allows different tiers to be assigned to different names. This is useful, for example, if you run a Patreon with several tiers and want each member shown under their tier. How to actually write the names and tiers is explained on the [Pastebin](./pastebin.mdx) page.
+
+---
+
+## Tier Settings
+
+These fields are only used when **`Tiers Enabled`** is turned on.
+
+*   **`Tier Names`**: An array holding the name of each tier (for example `Bronze`, `Silver`, `Gold`).
+*   **`Tier Colors`**: An array holding the color associated with each tier.
+
+`Tier Names` and `Tier Colors` are **parallel arrays**: the tier at index `0` uses the color at index `0`, the tier at index `1` uses the color at index `1`, and so on. Make sure both arrays have the same length and that the entries line up.
+
+---
+
+## Members Auto Fetch
+
+The member names (and their tiers) are pulled from a Pastebin at runtime, so you can update your board without re-uploading your VRChat world.
+
+*   **`Paste Bin URL`**: The **raw** URL of your paste. Create a paste on Pastebin, click the **Raw** button, and copy the URL from your browser's address bar (it should look like `https://pastebin.com/raw/...`). Paste that value here.

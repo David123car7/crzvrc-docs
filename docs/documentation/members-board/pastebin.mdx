@@ -1,0 +1,47 @@
+---
+sidebar_position: 3
+---
+
+# Pastebin
+
+The Members Board reads its member list from the raw Pastebin URL. How you format that paste depends on whether tiers are enabled.
+
+---
+
+## Tiers Disabled
+
+Write one name per line. Nothing else is needed.
+
+```
+CrZ
+FriendOne
+FriendTwo
+FriendThree
+```
+
+Every line becomes an entry on the board, and all names use the default name text color.
+
+---
+
+## Tiers Enabled
+
+Write the name, then a comma, then the tier, one entry per line:
+
+```
+name,tier
+```
+
+For example:
+
+```
+CrZ,Gold
+FriendOne,Silver
+FriendTwo,Bronze
+FriendThree,Gold
+```
+
+### Rules for tiers
+
+*   The tier written after the comma **must match exactly** one of the entries in the `Tier Names` array on the `MB_MembersBoard` script (matching is case-sensitive).
+*   If you leave the tier out (just a name with no comma), or the tier does not match any entry in `Tier Names`, the name is still shown on the board, but its color falls back to the **default name text color**.
+*   The default name text color is configured on the `MB_ConfigUI` script. See the [UI Configuration](./uiconfiguration.mdx) page for details.

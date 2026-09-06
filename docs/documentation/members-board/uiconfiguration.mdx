@@ -1,0 +1,48 @@
+---
+sidebar_position: 2
+---
+
+# UI Configuration
+
+The visual configuration of the Members Board is split across two GameObjects inside the prefab:
+
+*   **`_UI`** — holds the `MB_MembersBoardUI` script, which controls the layout and scrolling behavior of the board.
+*   **`_configUI`** — holds the `MB_ConfigUI` script, which controls the default colors used when drawing member entries.
+
+---
+
+## Layout Settings (MB_MembersBoardUI)
+
+These are the layout settings. **You should only touch them if you are building a board with a different size than the prefabs that already ship with the asset.**
+
+*   **`Max Rows`**: The maximum number of rows the board displays at once. This is what drives the auto scroll: if the number of names does not fit within `Max Rows`, the board starts scrolling automatically so every entry becomes visible.
+*   **`Row Height`**: The height of a single row. Only change this if you have changed the height of the `memberCard` prefab (the prefab used to display each player name), so the layout stays aligned with the new card size.
+*   **`Scroll Speed`**: How fast the board auto scrolls when there are more names than `Max Rows`.
+*   **`Column Spacing`**: The horizontal spacing between columns on the board.
+
+:::warning
+Do **not** change `Max Rows`, `Row Height` or `Column Spacing` on the prefabs included with the asset. They are already tuned to match those prefabs. If you want a board with different dimensions, duplicate the prefab into a new one and adjust the values there.
+:::
+
+---
+
+## Style Settings (MB_ConfigUI) 
+
+This script stores the visual style of the board: the colors and image used by the panel itself, and the appearance of each member card.
+
+### Panel Settings
+
+*   **`Background Color`**: The color of the board's background panel.
+*   **`Border Color`**: The color of the board's outer border.
+*   **`Tittle Color`**: The color of the board title text.
+*   **`Default Names Text Color`**: The color used for a member's name when no tier color applies — that is, when tiers are disabled, or when an entry's tier is missing or does not match any name in the `Tier Names` array. See the [Pastebin](./pastebin.mdx) page for how tiers are matched.
+*   **`Background Image`**: An optional sprite drawn as the board's background.
+
+### Member Card Settings
+
+These control the look of the individual cards (`memberCard`) that display each name.
+
+*   **`Card Has Border`**: When enabled, each member card draws a border.
+*   **`Card Has Background`**: When enabled, each member card draws a background fill.
+*   **`Card Background Color`**: The fill color of a member card. Only used when `Card Has Background` is enabled.
+*   **`Card Border Color`**: The border color of a member card. Only used when `Card Has Border` is enabled.
