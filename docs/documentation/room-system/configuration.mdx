@@ -4,13 +4,22 @@ sidebar_position: 2
 
 # Configuration
 
-The core settings for the Room System are managed inside the `RS_Config` script. This file stores the global constants that define the capacities and limits for your rooms, UI queues, and the world itself. 
+The Room System's configuration is spread across a few different places, depending on what you want to change:
 
-If you need to adjust the maximum number of players allowed in a room, or increase the world capacity limit to match your VRChat instance settings, you will modify these values directly within the `RS_Config` script.
+*   **Capacities and limits** are constants inside the `RS_Config` script and must be edited directly in that file.
+*   **Room teleport positions** are Transforms on the **RoomSystem** GameObject.
+*   **Sound effects** live on their own GameObjects (`_intercom`, `_selfieCamera`).
+*   **Notification alerts** are configured with the `RS_NotificationConfig` script on the **RoomsManagement** GameObject.
+
+Each of these is covered in its own section below.
 
 ---
 
-## Constants Overview
+## Constants (`RS_Config`)
+
+These are global constants that define the capacities and limits for your rooms, UI queues, and the world itself. They are **not** exposed in the Inspector — open the `RS_Config` script and change the values directly in the file.
+
+If you need to adjust the maximum number of players allowed in a room, or increase the world capacity limit to match your VRChat instance settings, you will modify these values here.
 
 *   **`WORLD_MAX_CAPACITY`** (Default: `12`): Defines the maximum number of players your VRChat world can hold. 
 
@@ -37,11 +46,13 @@ If you want to swap out the default audio clips to better match the atmosphere o
 *   **Intercom Sounds:** Locate and select the **`_intercom`** GameObject in your room's hierarchy to change the ringing or notification audio.
 *   **Camera Sounds:** Locate and select the **`_selfieCamera`** GameObject to adjust the sound effects triggered by the room's security camera.
 
-### Customizing Notification Alerts
+---
+
+## Customizing Notification Alerts
 
 You can fully customize the look and text of these alerts directly on the **RoomsManagement** GameObject. Look for the `RS_NotificationConfig` script in the Inspector to modify the following settings:
 
-#### Deny User Notification
+### Deny User Notification
 This alert is sent to a player when the room owner explicitly denies their intercom request.
 *   **Deny User Text:** The main header text for the alert (default is `NOT ACCEPTED`).
 *   **Deny User Text Color:** The color of the main header text.
@@ -49,7 +60,7 @@ This alert is sent to a player when the room owner explicitly denies their inter
 *   **Deny User Sprite:** The icon displayed next to the message.
 *   **Deny User Sprite Color:** The color tint applied to the icon.
 
-#### Intercom Ring Notification
+### Intercom Ring Notification
 This alert is sent to the room owner(s) when someone rings their room from the outside.
 *   **Intercom Ring Text:** The main header text for the alert (default is `INTERCOM RING`).
 *   **Intercom Ring Text Color:** The color of the main header text.
