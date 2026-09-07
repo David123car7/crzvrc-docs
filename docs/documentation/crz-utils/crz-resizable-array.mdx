@@ -1,0 +1,203 @@
+---
+sidebar_position: 2
+---
+
+# CrZ_ResizableArray
+
+`CrZ_ResizableArray<T>` is the same idea as [`CrZ_Array`](./crz-array.mdx), but every operation that changes the element count **returns a new array of the correct size** instead of working in place. You must assign the result back to your variable:
+
+```csharp
+myArray = CrZ_ResizableArray<int>.Add(myArray, 5);
+```
+
+```csharp
+public static class CrZ_ResizableArray<T> where T : System.IComparable<T>
+```
+
+The type argument `T` must implement `System.IComparable<T>` (required by `SortArrayAscending`).
+
+---
+
+## Methods
+
+### `InitializeArray`
+
+Sets every slot of the array to the same value, in place. Does nothing if `array` is `null`.
+
+`public static void InitializeArray(T[] array, T value)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `array` | `T[]` | The array to fill. |
+| `value` | `T` | The value written to every index. |
+
+---
+
+### `Exists`
+
+Returns whether the value is present in the array.
+
+`public static bool Exists(T[] array, T value)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `array` | `T[]` | The array to search. |
+| `value` | `T` | The value to look for. |
+
+**Returns:** `true` if the value is found; `false` if it is missing or `array` is `null`.
+
+---
+
+### `Index`
+
+Returns the index of the first occurrence of the value.
+
+`public static int Index(T[] array, T value)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `array` | `T[]` | The array to search. |
+| `value` | `T` | The value to look for. |
+
+**Returns:** The zero-based index of the first match, or `-1` if the value is missing or `array` is `null`.
+
+---
+
+### `Add`
+
+Grows the array by one slot and stores `value` at the end.
+
+`public static T[] Add(T[] array, T value)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `array` | `T[]` | The source array. If `null`, a new single-element array is returned. |
+| `value` | `T` | The value appended to the end. |
+
+**Returns:** A new array one slot larger than `array`.
+
+---
+
+### `InsertValue`
+
+Fills the first slot that currently holds `nullValue` with `value`. If the array has no free slot, it falls back to [`Add`](#add) and returns a larger array.
+
+`public static T[] InsertValue(T[] array, T value, T nullValue)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `array` | `T[]` | The source array. If `null`, a new single-element array is returned. |
+| `value` | `T` | The value to store. |
+| `nullValue` | `T` | The sentinel that marks an empty slot. |
+
+**Returns:** The same array (when a free slot was reused) or a new array one slot larger (when the array was full).
+
+---
+
+### `InsertAt`
+
+Inserts `value` at index `pos`, shifting every element from `pos` onwards one place to the right.
+
+`public static T[] InsertAt(T[] array, T value, int pos)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `array` | `T[]` | The source array. If `null`, a new single-element array is returned. |
+| `value` | `T` | The value to insert. |
+| `pos` | `int` | The target index. Clamped to the range `0`–`array.Length`. |
+
+**Returns:** A new array one slot larger than `array`.
+
+---
+
+### `RemoveValueByValue`
+
+Removes the first occurrence of `valueToRemove`.
+
+`public static T[] RemoveValueByValue(T[] array, T valueToRemove)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `array` | `T[]` | The source array. Returns `null` if `array` is `null`. |
+| `valueToRemove` | `T` | The value to remove. |
+
+**Returns:** A new array one slot smaller. The original `array` is returned unchanged if the value is not found.
+
+---
+
+### `RemoveValue`
+
+Removes the element at index `pos`.
+
+`public static T[] RemoveValue(T[] array, int pos)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `array` | `T[]` | The source array. |
+| `pos` | `int` | The zero-based index of the element to remove. |
+
+**Returns:** A new array one slot smaller. The original `array` is returned unchanged if `pos` is out of range or `array` is `null`.
+
+---
+
+### `RemoveNulls`
+
+Returns a copy of the array with every element equal to `nullValue` stripped out, so the length matches the real element count.
+
+`public static T[] RemoveNulls(T[] array, T nullValue)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `array` | `T[]` | The source array. Returns `null` if `array` is `null`. |
+| `nullValue` | `T` | The sentinel value to remove. |
+
+**Returns:** A new array containing only the non-sentinel elements, in their original order.
+
+---
+
+### `Resize`
+
+Grows or shrinks the array to `newSize`, keeping as many existing elements as fit. New slots are left at their default value.
+
+`public static T[] Resize(T[] array, int newSize)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `array` | `T[]` | The source array. May be `null`, in which case an empty array of `newSize` is returned. |
+| `newSize` | `int` | The desired length. If negative, `array` is returned unchanged. |
+
+**Returns:** A new array of length `newSize`.
+
+---
+
+### `SortArrayAscending`
+
+Sorts the array in ascending order, **in place**, using a selection sort and `T.CompareTo`. Does nothing if `array` is `null`.
+
+`public static void SortArrayAscending(T[] array)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `array` | `T[]` | The array to sort. |

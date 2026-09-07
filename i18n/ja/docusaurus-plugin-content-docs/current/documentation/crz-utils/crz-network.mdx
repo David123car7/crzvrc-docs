@@ -1,0 +1,48 @@
+---
+sidebar_position: 3
+---
+
+# CRZ_Network
+
+`CRZ_Network` は、CrZVRC の各アセットで使われるネットワーク関連のヘルパーをまとめた小さな静的クラスです。安全なオーナーシップの移譲と、プレイヤー ID から表示名を引くショートカットを提供します。
+
+```csharp
+public static class CRZ_Network
+```
+
+---
+
+## メソッド
+
+### `SetOwnership`
+
+`gameobject` のオーナーシップを `player` に移譲します。ただし、`player` がまだオーナーでない場合のみ実行します。これにより、不要な `Networking.SetOwner` の呼び出しを避けられます。
+
+`public static void SetOwnership(VRCPlayerApi player, GameObject gameobject)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `player` | `VRCPlayerApi` | オブジェクトのオーナーにすべきプレイヤー。 |
+| `gameobject` | `GameObject` | オーナーシップを更新する対象のオブジェクト。 |
+
+---
+
+### `GetPlayerName`
+
+指定したプレイヤー ID を持つプレイヤーの表示名を返します。
+
+`public static string GetPlayerName(int playerId)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `playerId` | `int` | 検索する VRChat のプレイヤー ID。 |
+
+**戻り値:** そのプレイヤーの `displayName`。
+
+:::warning
+このメソッドは検索結果を null チェックしません。`playerId` に該当するプレイヤーが現在インスタンスにいない場合、`VRCPlayerApi.GetPlayerById` は `null` を返し、`displayName` へのアクセスは例外を投げます。有効だと分かっている ID でのみ呼び出してください（例: `OnPlayerJoined` 内や、まだ追跡中のプレイヤー ID）。
+:::

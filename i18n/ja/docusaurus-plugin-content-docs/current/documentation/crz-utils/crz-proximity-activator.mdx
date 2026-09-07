@@ -1,0 +1,89 @@
+---
+sidebar_position: 4
+---
+
+# CrZ_ProximityActivator
+
+`CrZ_ProximityActivator` は、アセットに依存しないドロップイン式の **近接スイッチ** です。トリガーコライダーを持つ GameObject に取り付けると、ローカルプレイヤーがそのコライダーの内側にいる間は対象をオンにし、外へ出るとオフにします。何をトグルしているかをこのスクリプト自身は知らないため、同じスクリプトを変更なしで複数のアセットに使い回せます。
+
+よくある用途はパフォーマンス対策です。アセットのスクロール UI（や `Update()` ループ、`AudioSource`、`ParticleSystem`、`Renderer` など）を、プレイヤーが気づける距離にいる間だけ有効なままにしておく、といった使い方です。
+
+```csharp
+[UdonBehaviourSyncMode(BehaviourSyncMode.None)]
+public class CrZ_ProximityActivator : UdonSharpBehaviour
+```
+
+---
+
+## セットアップ
+
+1.  **「Is Trigger」を有効にした Collider** を持つ GameObject に、このスクリプトを取り付けます。対象を有効化したい地点より少し外側までコライダーを広げてください。スポーン時の範囲内判定が機能するよう、凸型のコライダー（Box / Sphere / Capsule）を使用します。
+2.  トグルしたいものを **Behaviours To Toggle** にドラッグします。UdonSharp スクリプト（その `Update()` / スクロールなどが停止します）、`Canvas`、`AudioSource`、`Renderer`、`ParticleSystem` など、`Behaviour` から派生した任意のコンポーネントが対象です。その `.enabled` が切り替えられます。
+3.  *(任意)* `.enabled` の切り替えではなく、より強力な `SetActive()` を使いたい場合は、GameObject 全体を **Game Objects To Toggle** にドラッグします。
+4.  *(任意)* 対象スクリプトが `.enabled` だけでなくカスタムイベントのフック（例: スクロール位置のリセット）を必要とする場合は、**Notify On Enter / Exit** を設定します。
+
+トリガーの内側にスポーンしたプレイヤーにも対応しています。ワールド読み込み時にすでにトリガー内にいるプレイヤーには `OnPlayerTriggerEnter` が発火しないため、`Start()` で手動の範囲チェックを 1 回行います。
+
+---
+
+## Inspector のフィールド
+
+### What to toggle
+
+| フィールド | 型 | 説明 |
+| :--- | :--- | :--- |
+| `behavioursToToggle` | `UdonBehaviour[]` | プレイヤーが範囲に出入りしたときに `.enabled` を切り替える、Behaviour 派生のコンポーネント。 |
+| `gameObjectsToToggle` | `GameObject[]` | `SetActive()` で切り替える GameObject 全体。`.enabled` の切り替えより重くなります。 |
+
+### Optional custom event hooks
+
+| フィールド | 型 | 説明 |
+| :--- | :--- | :--- |
+| `notifyOnEnter` | `UdonSharpBehaviour[]` | ローカルプレイヤーが範囲に入ったときにカスタムイベントを受け取るスクリプト。 |
+| `enterEventName` | `string` | `notifyOnEnter` のスクリプトへ送るカスタムイベント名。既定値: `OnProximityEnter`。 |
+| `notifyOnExit` | `UdonSharpBehaviour[]` | ローカルプレイヤーが範囲から出たときにカスタムイベントを受け取るスクリプト。 |
+| `exitEventName` | `string` | `notifyOnExit` のスクリプトへ送るカスタムイベント名。既定値: `OnProximityExit`。 |
+
+### Behaviour
+
+| フィールド | 型 | 説明 |
+| :--- | :--- | :--- |
+| `invert` | `bool` | ロジックを反転します。対象は有効な状態で開始し、範囲に入ると **無効化** され、出ると再度有効化されます。既定値: `false`。 |
+
+---
+
+## メソッド
+
+### `OnPlayerTriggerEnter`
+
+VRChat のコールバック。**ローカル** プレイヤーがトリガーに入ると、設定された対象を有効化し（`invert` が `true` の場合は無効化し）、`notifyOnEnter` のイベントを発火します。リモートプレイヤーの場合は無視されます。
+
+`public override void OnPlayerTriggerEnter(VRCPlayerApi player)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `player` | `VRCPlayerApi` | トリガーに入ったプレイヤー。`player.isLocal` でない限り無視されます。 |
+
+---
+
+### `OnPlayerTriggerExit`
+
+VRChat のコールバック。**ローカル** プレイヤーがトリガーから出ると、設定された対象を無効化し（`invert` が `true` の場合は有効化し）、`notifyOnExit` のイベントを発火します。リモートプレイヤーの場合は無視されます。
+
+`public override void OnPlayerTriggerExit(VRCPlayerApi player)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `player` | `VRCPlayerApi` | トリガーから出たプレイヤー。`player.isLocal` でない限り無視されます。 |
+
+---
+
+### `Start`
+
+トリガーコライダーをキャッシュし、初期状態を適用します。ローカルプレイヤーがすでにトリガー内にスポーンしているケースには、`Collider.ClosestPoint` による手動の範囲チェックを 1 回行って対応します。
+
+`public void Start()`

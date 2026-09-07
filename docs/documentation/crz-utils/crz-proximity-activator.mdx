@@ -1,0 +1,89 @@
+---
+sidebar_position: 4
+---
+
+# CrZ_ProximityActivator
+
+`CrZ_ProximityActivator` is a drop-in, asset-agnostic **proximity switch**. You put it on a GameObject with a trigger collider, and it turns things on when the local player is inside that collider and off when they leave. It has no knowledge of what it is toggling, so the same script is reused across assets without modification.
+
+A common use is performance: an asset's scrolling UI (or `Update()` loop, `AudioSource`, `ParticleSystem`, `Renderer`, etc.) is only left enabled while a player is close enough to notice it.
+
+```csharp
+[UdonBehaviourSyncMode(BehaviourSyncMode.None)]
+public class CrZ_ProximityActivator : UdonSharpBehaviour
+```
+
+---
+
+## Setup
+
+1.  Put this script on a GameObject with a **Collider set to "Is Trigger"**. Size the collider a bit beyond the point where the target should activate. Use a convex collider (Box / Sphere / Capsule) so the spawn-in-range check works.
+2.  Drag anything you want toggled into **Behaviours To Toggle** — UdonSharp scripts (which stops their `Update()` / scrolling / etc.), `Canvas`, `AudioSource`, `Renderer`, `ParticleSystem`… any `Behaviour`-derived component. Its `.enabled` is flipped.
+3.  *(Optional)* Drag whole GameObjects into **Game Objects To Toggle** for a harder `SetActive()` instead of just `.enabled`.
+4.  *(Optional)* Wire **Notify On Enter / Exit** if a target script needs a custom event hook (for example, to reset its scroll position) rather than just `.enabled`.
+
+Players who spawn already inside the trigger are handled: `Start()` does a manual range check, because `OnPlayerTriggerEnter` does not fire for a player who is already inside the trigger at world load.
+
+---
+
+## Inspector fields
+
+### What to toggle
+
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| `behavioursToToggle` | `UdonBehaviour[]` | Behaviour-derived components whose `.enabled` is flipped when the player enters / exits range. |
+| `gameObjectsToToggle` | `GameObject[]` | Whole GameObjects toggled with `SetActive()`. Heavier than toggling `.enabled`. |
+
+### Optional custom event hooks
+
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| `notifyOnEnter` | `UdonSharpBehaviour[]` | Scripts that receive a custom event when the local player enters range. |
+| `enterEventName` | `string` | The custom event name sent to `notifyOnEnter` scripts. Default: `OnProximityEnter`. |
+| `notifyOnExit` | `UdonSharpBehaviour[]` | Scripts that receive a custom event when the local player exits range. |
+| `exitEventName` | `string` | The custom event name sent to `notifyOnExit` scripts. Default: `OnProximityExit`. |
+
+### Behaviour
+
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| `invert` | `bool` | Flips the logic: targets start enabled and are **disabled** on enter, re-enabled on exit. Default: `false`. |
+
+---
+
+## Methods
+
+### `OnPlayerTriggerEnter`
+
+VRChat callback. When the **local** player enters the trigger, enables the configured targets (or disables them when `invert` is `true`) and fires the `notifyOnEnter` events. Ignored for remote players.
+
+`public override void OnPlayerTriggerEnter(VRCPlayerApi player)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `player` | `VRCPlayerApi` | The player that entered the trigger. Ignored unless `player.isLocal`. |
+
+---
+
+### `OnPlayerTriggerExit`
+
+VRChat callback. When the **local** player leaves the trigger, disables the configured targets (or enables them when `invert` is `true`) and fires the `notifyOnExit` events. Ignored for remote players.
+
+`public override void OnPlayerTriggerExit(VRCPlayerApi player)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `player` | `VRCPlayerApi` | The player that left the trigger. Ignored unless `player.isLocal`. |
+
+---
+
+### `Start`
+
+Caches the trigger collider and applies the initial state. Handles the case where the local player spawns already inside the trigger by doing one manual `Collider.ClosestPoint` range check.
+
+`public void Start()`

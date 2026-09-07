@@ -1,0 +1,128 @@
+---
+sidebar_position: 1
+---
+
+# CrZ_Array
+
+`CrZ_Array<T>` は、**固定長の配列をその場（in place）で操作する** ための静的ヘルパークラスです。Udon には `List<T>` がないため、これらのメソッドを使うことで、長さが変わらない配列に対して要素の検索・一括設定・挿入・削除を行えます。要素の「削除」は、残りの要素を前方へ詰め、末尾の空いたスロットに呼び出し側が指定した *null 値* を書き込みます。
+
+配列を実際に拡張・縮小する操作が必要な場合は、代わりに [`CrZ_ResizableArray`](./crz-resizable-array.mdx) を使用してください。
+
+```csharp
+public static class CrZ_Array<T> where T : System.IComparable<T>
+```
+
+型引数 `T` は `System.IComparable<T>` を実装している必要があります（`SortArrayAscending` で必要）。
+
+---
+
+## メソッド
+
+### `InitializeArray`
+
+配列のすべてのスロットを同じ値に設定します。`array` が `null` の場合は何もしません。
+
+`public static void InitializeArray(T[] array, T value)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `array` | `T[]` | 埋める対象の配列。 |
+| `value` | `T` | すべてのインデックスに書き込む値。 |
+
+---
+
+### `Exists`
+
+値が配列内に存在するかどうかを返します。
+
+`public static bool Exists(T[] array, T value)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `array` | `T[]` | 検索対象の配列。 |
+| `value` | `T` | 探す値。 |
+
+**戻り値:** 値が見つかれば `true`。見つからない場合や `array` が `null` の場合は `false`。
+
+---
+
+### `Index`
+
+値が最初に出現するインデックスを返します。
+
+`public static int Index(T[] array, T value)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `array` | `T[]` | 検索対象の配列。 |
+| `value` | `T` | 探す値。 |
+
+**戻り値:** 最初に一致した位置の 0 始まりのインデックス。値がない場合や `array` が `null` の場合は `-1`。
+
+---
+
+### `InsertValue`
+
+現在 `nullValue` を保持している最初のスロットに `value` を書き込みます。空きスロットがない場合、配列は変更されません。
+
+`public static void InsertValue(T[] array, T value, T nullValue)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `array` | `T[]` | 挿入対象の配列。 |
+| `value` | `T` | 格納する値。 |
+| `nullValue` | `T` | 空きスロットを表すセンチネル値（例: `""` や `-1`）。 |
+
+---
+
+### `RemoveValueByValue`
+
+`valueToRemove` の最初の出現を削除します。それより後ろの要素はすべて 1 つ前へ詰められ、末尾のスロットには `nullValue` が設定されます。値が見つからない場合は何もしません。
+
+`public static void RemoveValueByValue(T[] array, T valueToRemove, T nullValue)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `array` | `T[]` | 変更対象の配列。 |
+| `valueToRemove` | `T` | 削除する値。 |
+| `nullValue` | `T` | 末尾の空いたスロットに書き込むセンチネル値。 |
+
+---
+
+### `RemoveValue`
+
+`pos` の位置の要素を削除します。それより後ろの要素はすべて 1 つ前へ詰められ、末尾のスロットには `nullValue` が設定されます。`pos` が範囲外、または `array` が `null` の場合は何もしません。
+
+`public static void RemoveValue(T[] array, int pos, T nullValue)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `array` | `T[]` | 変更対象の配列。 |
+| `pos` | `int` | 削除する要素の 0 始まりのインデックス。 |
+| `nullValue` | `T` | 末尾の空いたスロットに書き込むセンチネル値。 |
+
+---
+
+### `SortArrayAscending`
+
+選択ソートと `T.CompareTo` を使い、配列を昇順にその場でソートします。`array` が `null` の場合は何もしません。
+
+`public static void SortArrayAscending(T[] array)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `array` | `T[]` | ソート対象の配列。 |

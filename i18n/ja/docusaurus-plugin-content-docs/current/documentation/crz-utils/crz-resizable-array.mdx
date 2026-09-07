@@ -1,0 +1,203 @@
+---
+sidebar_position: 2
+---
+
+# CrZ_ResizableArray
+
+`CrZ_ResizableArray<T>` は [`CrZ_Array`](./crz-array.mdx) と同じ考え方ですが、要素数を変える操作はすべて **正しいサイズの新しい配列を返します**（その場では変更しません）。結果を必ず変数へ代入し直す必要があります。
+
+```csharp
+myArray = CrZ_ResizableArray<int>.Add(myArray, 5);
+```
+
+```csharp
+public static class CrZ_ResizableArray<T> where T : System.IComparable<T>
+```
+
+型引数 `T` は `System.IComparable<T>` を実装している必要があります（`SortArrayAscending` で必要）。
+
+---
+
+## メソッド
+
+### `InitializeArray`
+
+配列のすべてのスロットを同じ値にその場で設定します。`array` が `null` の場合は何もしません。
+
+`public static void InitializeArray(T[] array, T value)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `array` | `T[]` | 埋める対象の配列。 |
+| `value` | `T` | すべてのインデックスに書き込む値。 |
+
+---
+
+### `Exists`
+
+値が配列内に存在するかどうかを返します。
+
+`public static bool Exists(T[] array, T value)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `array` | `T[]` | 検索対象の配列。 |
+| `value` | `T` | 探す値。 |
+
+**戻り値:** 値が見つかれば `true`。見つからない場合や `array` が `null` の場合は `false`。
+
+---
+
+### `Index`
+
+値が最初に出現するインデックスを返します。
+
+`public static int Index(T[] array, T value)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `array` | `T[]` | 検索対象の配列。 |
+| `value` | `T` | 探す値。 |
+
+**戻り値:** 最初に一致した位置の 0 始まりのインデックス。値がない場合や `array` が `null` の場合は `-1`。
+
+---
+
+### `Add`
+
+配列を 1 スロット拡張し、末尾に `value` を格納します。
+
+`public static T[] Add(T[] array, T value)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `array` | `T[]` | 元の配列。`null` の場合は、要素 1 つの新しい配列を返します。 |
+| `value` | `T` | 末尾に追加する値。 |
+
+**戻り値:** `array` より 1 スロット大きい新しい配列。
+
+---
+
+### `InsertValue`
+
+現在 `nullValue` を保持している最初のスロットを `value` で埋めます。空きスロットがない場合は [`Add`](#add) にフォールバックし、より大きな配列を返します。
+
+`public static T[] InsertValue(T[] array, T value, T nullValue)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `array` | `T[]` | 元の配列。`null` の場合は、要素 1 つの新しい配列を返します。 |
+| `value` | `T` | 格納する値。 |
+| `nullValue` | `T` | 空きスロットを表すセンチネル値。 |
+
+**戻り値:** 空きスロットを再利用できた場合は同じ配列、配列が満杯だった場合は 1 スロット大きい新しい配列。
+
+---
+
+### `InsertAt`
+
+インデックス `pos` に `value` を挿入し、`pos` 以降の要素をすべて 1 つ後ろへずらします。
+
+`public static T[] InsertAt(T[] array, T value, int pos)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `array` | `T[]` | 元の配列。`null` の場合は、要素 1 つの新しい配列を返します。 |
+| `value` | `T` | 挿入する値。 |
+| `pos` | `int` | 挿入先のインデックス。`0`〜`array.Length` の範囲にクランプされます。 |
+
+**戻り値:** `array` より 1 スロット大きい新しい配列。
+
+---
+
+### `RemoveValueByValue`
+
+`valueToRemove` の最初の出現を削除します。
+
+`public static T[] RemoveValueByValue(T[] array, T valueToRemove)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `array` | `T[]` | 元の配列。`array` が `null` の場合は `null` を返します。 |
+| `valueToRemove` | `T` | 削除する値。 |
+
+**戻り値:** 1 スロット小さい新しい配列。値が見つからない場合は、元の `array` をそのまま返します。
+
+---
+
+### `RemoveValue`
+
+インデックス `pos` の要素を削除します。
+
+`public static T[] RemoveValue(T[] array, int pos)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `array` | `T[]` | 元の配列。 |
+| `pos` | `int` | 削除する要素の 0 始まりのインデックス。 |
+
+**戻り値:** 1 スロット小さい新しい配列。`pos` が範囲外、または `array` が `null` の場合は、元の `array` をそのまま返します。
+
+---
+
+### `RemoveNulls`
+
+`nullValue` に等しい要素をすべて取り除いた配列のコピーを返します。長さが実際の要素数と一致するようになります。
+
+`public static T[] RemoveNulls(T[] array, T nullValue)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `array` | `T[]` | 元の配列。`array` が `null` の場合は `null` を返します。 |
+| `nullValue` | `T` | 取り除くセンチネル値。 |
+
+**戻り値:** センチネルでない要素だけを元の順序で含む新しい配列。
+
+---
+
+### `Resize`
+
+配列を `newSize` に拡張または縮小し、収まる範囲で既存の要素を保持します。新しいスロットは既定値のままになります。
+
+`public static T[] Resize(T[] array, int newSize)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `array` | `T[]` | 元の配列。`null` でもよく、その場合は長さ `newSize` の空の配列を返します。 |
+| `newSize` | `int` | 目的の長さ。負の値の場合は `array` をそのまま返します。 |
+
+**戻り値:** 長さ `newSize` の新しい配列。
+
+---
+
+### `SortArrayAscending`
+
+選択ソートと `T.CompareTo` を使い、配列を昇順に **その場で** ソートします。`array` が `null` の場合は何もしません。
+
+`public static void SortArrayAscending(T[] array)`
+
+**パラメータ:**
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `array` | `T[]` | ソート対象の配列。 |

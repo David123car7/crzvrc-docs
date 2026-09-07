@@ -1,0 +1,128 @@
+---
+sidebar_position: 1
+---
+
+# CrZ_Array
+
+`CrZ_Array<T>` is a static helper class for working with **fixed-length arrays in place**. Udon has no `List<T>`, so these methods let you search, fill, insert and remove elements on an array whose length never changes. "Removing" an element shifts the rest down and writes a caller-provided *null value* into the freed slot at the end.
+
+If you need operations that actually grow or shrink the array, use [`CrZ_ResizableArray`](./crz-resizable-array.mdx) instead.
+
+```csharp
+public static class CrZ_Array<T> where T : System.IComparable<T>
+```
+
+The type argument `T` must implement `System.IComparable<T>` (required by `SortArrayAscending`).
+
+---
+
+## Methods
+
+### `InitializeArray`
+
+Sets every slot of the array to the same value. Does nothing if `array` is `null`.
+
+`public static void InitializeArray(T[] array, T value)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `array` | `T[]` | The array to fill. |
+| `value` | `T` | The value written to every index. |
+
+---
+
+### `Exists`
+
+Returns whether the value is present in the array.
+
+`public static bool Exists(T[] array, T value)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `array` | `T[]` | The array to search. |
+| `value` | `T` | The value to look for. |
+
+**Returns:** `true` if the value is found; `false` if it is missing or `array` is `null`.
+
+---
+
+### `Index`
+
+Returns the index of the first occurrence of the value.
+
+`public static int Index(T[] array, T value)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `array` | `T[]` | The array to search. |
+| `value` | `T` | The value to look for. |
+
+**Returns:** The zero-based index of the first match, or `-1` if the value is missing or `array` is `null`.
+
+---
+
+### `InsertValue`
+
+Writes `value` into the first slot that currently holds `nullValue`. If there is no free slot, the array is left unchanged.
+
+`public static void InsertValue(T[] array, T value, T nullValue)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `array` | `T[]` | The array to insert into. |
+| `value` | `T` | The value to store. |
+| `nullValue` | `T` | The sentinel that marks an empty slot (for example `""` or `-1`). |
+
+---
+
+### `RemoveValueByValue`
+
+Removes the first occurrence of `valueToRemove`. Every element after it is shifted one place to the left, and the last slot is set to `nullValue`. Does nothing if the value is not found.
+
+`public static void RemoveValueByValue(T[] array, T valueToRemove, T nullValue)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `array` | `T[]` | The array to modify. |
+| `valueToRemove` | `T` | The value to remove. |
+| `nullValue` | `T` | The sentinel written into the freed slot at the end. |
+
+---
+
+### `RemoveValue`
+
+Removes the element at `pos`. Every element after it is shifted one place to the left, and the last slot is set to `nullValue`. Does nothing if `pos` is out of range or `array` is `null`.
+
+`public static void RemoveValue(T[] array, int pos, T nullValue)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `array` | `T[]` | The array to modify. |
+| `pos` | `int` | The zero-based index of the element to remove. |
+| `nullValue` | `T` | The sentinel written into the freed slot at the end. |
+
+---
+
+### `SortArrayAscending`
+
+Sorts the array in ascending order, in place, using a selection sort and `T.CompareTo`. Does nothing if `array` is `null`.
+
+`public static void SortArrayAscending(T[] array)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `array` | `T[]` | The array to sort. |

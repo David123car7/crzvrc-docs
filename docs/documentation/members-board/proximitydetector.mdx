@@ -1,0 +1,20 @@
+---
+sidebar_position: 4
+---
+
+# Proximity Detector
+
+Both Members Board prefabs include a child GameObject called **`ProximityDetector`** with a `CrZ_ProximityDetector` script on it. The script itself is documented on the **CrZ Utils** page.
+
+## What it does
+
+The Proximity Detector controls **when the board auto scrolls**:
+
+*   When the local player is **inside** the detector's area, the board's UI auto scrolls (when there are more names than fit on the board).
+*   When the player is **outside** it, auto scrolling stops. The board is still fully visible from a distance, it just stays static.
+
+This is a performance optimization: the scrolling layout only updates while someone is actually close enough to read it.
+
+## Adjusting the range
+
+The detection area is a **Box Collider** on the `ProximityDetector` GameObject. Resize and reposition that collider to define where auto scrolling should turn on. As soon as the local player enters the collider, scrolling activates; when they leave, it stops.

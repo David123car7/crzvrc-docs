@@ -1,0 +1,8 @@
+{
+  "label": "CrZ Utils",
+  "position": 9,
+  "link": {
+    "type": "generated-index",
+    "description": "CrZ Utils is the shared collection of helper scripts used across the CrZVRC assets. Most assets ship with one or more of these utilities inside their prefabs. This section documents each script and its public API for reference."
+  }
+}

@@ -1,0 +1,48 @@
+---
+sidebar_position: 3
+---
+
+# CRZ_Network
+
+`CRZ_Network` is a small static class with networking helpers used across the CrZVRC assets: a safe ownership transfer and a shortcut for looking up a player's display name by id.
+
+```csharp
+public static class CRZ_Network
+```
+
+---
+
+## Methods
+
+### `SetOwnership`
+
+Transfers ownership of `gameobject` to `player`, but only when `player` is not already the owner. This avoids redundant `Networking.SetOwner` calls.
+
+`public static void SetOwnership(VRCPlayerApi player, GameObject gameobject)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `player` | `VRCPlayerApi` | The player that should own the object. |
+| `gameobject` | `GameObject` | The object whose ownership should be updated. |
+
+---
+
+### `GetPlayerName`
+
+Returns the display name of the player with the given player id.
+
+`public static string GetPlayerName(int playerId)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `playerId` | `int` | The VRChat player id to look up. |
+
+**Returns:** The player's `displayName`.
+
+:::warning
+This method does not null-check the lookup. If no player with `playerId` is currently in the instance, `VRCPlayerApi.GetPlayerById` returns `null` and accessing `displayName` will throw. Only call it with an id you know is valid (for example inside `OnPlayerJoined`, or for a player id you are still tracking).
+:::
