@@ -1,0 +1,23 @@
+---
+sidebar_position: 1
+---
+
+# Configuration
+
+The main settings for the Players Board live on the **parent GameObject of the prefab**. Select it in your scene hierarchy and locate the `PL_PlayersBoard` script in the Inspector.
+
+---
+
+## General Settings
+
+*   **`Board Tittle`**: The text displayed as the title at the top of the board UI.
+
+---
+
+## Player Limit (`PL_Config`)
+
+The board allocates a fixed number of player slots when the world loads. That number is the `instancePlayerLimit` constant inside the `PL_Config` script.
+
+*   **`instancePlayerLimit`** (Default: `80`): The maximum number of players the board can show. It is **not** exposed in the Inspector — open the `PL_Config` script and change the value directly in the file.
+
+Set this value to match your world's maximum instance capacity, so the board has a slot for every player that can be present at once.

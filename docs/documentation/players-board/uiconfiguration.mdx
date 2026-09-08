@@ -1,0 +1,48 @@
+---
+sidebar_position: 2
+---
+
+# UI Configuration
+
+The visual configuration of the Players Board is split across two GameObjects inside the prefab:
+
+*   **`_UI`** — holds the `PL_PlayersBoardUI` script, which controls the layout and scrolling behavior of the board.
+*   **`_configUI`** — holds the `PL_ConfigUI` script, which controls the default colors used when drawing player entries.
+
+---
+
+## Layout Settings (PL_PlayersBoardUI)
+
+These are the layout settings. **You should only touch them if you are building a board with a different size than the prefabs that already ship with the asset.**
+
+*   **`Max Rows`**: The number of rows per column that counts as "full". The board only starts auto scrolling once **every** column is full, so raising this lets more players fit before scrolling kicks in.
+*   **`Row Height`**: The height of a single row. Only change this if you have changed the height of the `playerCard` prefab (the prefab used to display each player name), so the layout stays aligned with the new card size.
+*   **`Scroll Speed`**: How fast the board auto scrolls, in UI units per second, once every column is full.
+*   **`Column Spacing`**: The spacing between rows applied to each column's vertical layout group.
+
+:::warning
+Do **not** change `Max Rows`, `Row Height` or `Column Spacing` on the prefabs included with the asset. They are already tuned to match those prefabs. If you want a board with different dimensions, duplicate the prefab into a new one and adjust the values there.
+:::
+
+---
+
+## Style Settings (PL_ConfigUI)
+
+This script stores the visual style of the board: the colors and image used by the panel itself, and the appearance of each player card.
+
+### Panel Settings
+
+*   **`Background Color`**: The color of the board's background panel.
+*   **`Border Color`**: The color of the board's outer border.
+*   **`Tittle Color`**: The color of the board title text.
+*   **`Names Text Color`**: The color used for every player's name on the board.
+*   **`Background Image`**: An optional sprite drawn as the board's background.
+
+### Player Card Settings
+
+These control the look of the individual cards (`playerCard`) that display each name.
+
+*   **`Card Has Border`**: When enabled, each player card draws a border.
+*   **`Card Has Background`**: When enabled, each player card draws a background fill.
+*   **`Card Background Color`**: The fill color of a player card. Only used when `Card Has Background` is enabled.
+*   **`Card Border Color`**: The border color of a player card. Only used when `Card Has Border` is enabled.

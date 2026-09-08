@@ -1,0 +1,8 @@
+{
+  "label": "Players Board",
+  "position": 9,
+  "link": {
+    "type": "generated-index",
+    "description": "The Players Board displays the list of players currently in your world instance. The list updates automatically as players join and leave, with no setup required. It shares its look and layout options with the Members Board."
+  }
+}
