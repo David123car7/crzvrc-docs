@@ -18,3 +18,5 @@ This is a performance optimization: the scrolling layout only updates while some
 ## Adjusting the range
 
 The detection area is a **Box Collider** on the `ProximityDetector` GameObject. Resize and reposition that collider to define where auto scrolling should turn on. As soon as the local player enters the collider, scrolling activates; when they leave, it stops.
+
+When sizing the box, make sure it covers the player's body **in full** — from the floor to above head height — not just a thin band around their center. If the collider is too short vertically, VRChat may not register the player entering it and the scroll can fail to start.

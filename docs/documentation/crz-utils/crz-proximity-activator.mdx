@@ -17,12 +17,21 @@ public class CrZ_ProximityActivator : UdonSharpBehaviour
 
 ## Setup
 
-1.  Put this script on a GameObject with a **Collider set to "Is Trigger"**. Size the collider a bit beyond the point where the target should activate. Use a convex collider (Box / Sphere / Capsule) so the spawn-in-range check works.
+1.  Put this script on a GameObject with a **Collider set to "Is Trigger"**. Size the collider a bit beyond the point where the target should activate, and make sure it **reaches down to the floor** — the position check uses the player's feet. Use a convex collider (Box / Sphere / Capsule) so the position poll works.
 2.  Drag anything you want toggled into **Behaviours To Toggle** — UdonSharp scripts (which stops their `Update()` / scrolling / etc.), `Canvas`, `AudioSource`, `Renderer`, `ParticleSystem`… any `Behaviour`-derived component. Its `.enabled` is flipped.
 3.  *(Optional)* Drag whole GameObjects into **Game Objects To Toggle** for a harder `SetActive()` instead of just `.enabled`.
 4.  *(Optional)* Wire **Notify On Enter / Exit** if a target script needs a custom event hook (for example, to reset its scroll position) rather than just `.enabled`.
 
-Players who spawn already inside the trigger are handled: `Start()` does a manual range check, because `OnPlayerTriggerEnter` does not fire for a player who is already inside the trigger at world load.
+---
+
+## How it stays in sync
+
+The switch is kept correct by two mechanisms working together:
+
+*   **Trigger callbacks** (`OnPlayerTriggerEnter` / `OnPlayerTriggerExit`) handle a player physically **walking in or out** of the collider — these react instantly.
+*   **A polling loop** (`Poll`) re-checks the local player's position every `pollInterval` seconds and is the source of truth. It stays correct in the cases the trigger callbacks miss: spawning already inside the collider, respawning, being teleported, and the component being disabled and re-enabled.
+
+The poll reschedules itself through the delayed-event queue, so there is **no per-frame `Update()` cost**.
 
 ---
 
@@ -49,6 +58,7 @@ Players who spawn already inside the trigger are handled: `Start()` does a manua
 | Field | Type | Description |
 | :--- | :--- | :--- |
 | `invert` | `bool` | Flips the logic: targets start enabled and are **disabled** on enter, re-enabled on exit. Default: `false`. |
+| `pollInterval` | `float` | Seconds between local-player position checks. Walking in / out is handled instantly by the trigger callbacks; this poll only backstops spawn-inside / respawn / teleport, so `0.25`–`0.5` is plenty. Default: `0.25`. |
 
 ---
 
@@ -56,7 +66,7 @@ Players who spawn already inside the trigger are handled: `Start()` does a manua
 
 ### `OnPlayerTriggerEnter`
 
-VRChat callback. When the **local** player enters the trigger, enables the configured targets (or disables them when `invert` is `true`) and fires the `notifyOnEnter` events. Ignored for remote players.
+VRChat callback. Instant activation when the **local** player walks into the trigger: enables the configured targets (or disables them when `invert` is `true`) and fires the `notifyOnEnter` events. Ignored for remote players.
 
 `public override void OnPlayerTriggerEnter(VRCPlayerApi player)`
 
@@ -70,7 +80,7 @@ VRChat callback. When the **local** player enters the trigger, enables the confi
 
 ### `OnPlayerTriggerExit`
 
-VRChat callback. When the **local** player leaves the trigger, disables the configured targets (or enables them when `invert` is `true`) and fires the `notifyOnExit` events. Ignored for remote players.
+VRChat callback. Instant deactivation when the **local** player walks out of the trigger: disables the configured targets (or enables them when `invert` is `true`) and fires the `notifyOnExit` events. Ignored for remote players.
 
 `public override void OnPlayerTriggerExit(VRCPlayerApi player)`
 
@@ -82,8 +92,32 @@ VRChat callback. When the **local** player leaves the trigger, disables the conf
 
 ---
 
+### `Poll`
+
+The self-scheduling position check, started by `Start`. Reads the local player's position, tests it against the collider with `Collider.ClosestPoint`, applies the resulting in/out state, and reschedules itself `pollInterval` seconds later via `SendCustomEventDelayedSeconds`. This is the source of truth that keeps the switch correct across spawn-inside, respawn, teleport and re-enable. Duplicate or stacked loops collapse themselves, so it is safe to call directly to kick the loop.
+
+`public void Poll()`
+
+---
+
+### `RecheckNow`
+
+Optional hook for teleporter or station scripts. Forces an immediate in/out re-check instead of waiting up to `pollInterval` seconds. Call it with `SendCustomEvent("RecheckNow")` right after you move the player.
+
+`public void RecheckNow()`
+
+---
+
 ### `Start`
 
-Caches the trigger collider and applies the initial state. Handles the case where the local player spawns already inside the trigger by doing one manual `Collider.ClosestPoint` range check.
+Caches the trigger collider, applies the initial "out of range" state, and starts the `Poll` loop. There is no per-frame `Update`.
 
 `public void Start()`
+
+---
+
+### `OnEnable`
+
+Resumes the `Poll` loop if the component was disabled and re-enabled after `Start` had already run.
+
+`public void OnEnable()`

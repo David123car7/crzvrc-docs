@@ -17,12 +17,21 @@ public class CrZ_ProximityActivator : UdonSharpBehaviour
 
 ## セットアップ
 
-1.  **「Is Trigger」を有効にした Collider** を持つ GameObject に、このスクリプトを取り付けます。対象を有効化したい地点より少し外側までコライダーを広げてください。スポーン時の範囲内判定が機能するよう、凸型のコライダー（Box / Sphere / Capsule）を使用します。
+1.  **「Is Trigger」を有効にした Collider** を持つ GameObject に、このスクリプトを取り付けます。対象を有効化したい地点より少し外側までコライダーを広げ、さらに **床まで届く** ようにしてください（位置チェックはプレイヤーの足元を使います）。位置ポーリングが機能するよう、凸型のコライダー（Box / Sphere / Capsule）を使用します。
 2.  トグルしたいものを **Behaviours To Toggle** にドラッグします。UdonSharp スクリプト（その `Update()` / スクロールなどが停止します）、`Canvas`、`AudioSource`、`Renderer`、`ParticleSystem` など、`Behaviour` から派生した任意のコンポーネントが対象です。その `.enabled` が切り替えられます。
 3.  *(任意)* `.enabled` の切り替えではなく、より強力な `SetActive()` を使いたい場合は、GameObject 全体を **Game Objects To Toggle** にドラッグします。
 4.  *(任意)* 対象スクリプトが `.enabled` だけでなくカスタムイベントのフック（例: スクロール位置のリセット）を必要とする場合は、**Notify On Enter / Exit** を設定します。
 
-トリガーの内側にスポーンしたプレイヤーにも対応しています。ワールド読み込み時にすでにトリガー内にいるプレイヤーには `OnPlayerTriggerEnter` が発火しないため、`Start()` で手動の範囲チェックを 1 回行います。
+---
+
+## 状態の同期のしくみ
+
+スイッチは、次の 2 つのしくみが連携して正しい状態に保たれます。
+
+*   **トリガーコールバック**（`OnPlayerTriggerEnter` / `OnPlayerTriggerExit`）は、プレイヤーがコライダーへ実際に **歩いて出入りする** ケースを処理し、即座に反応します。
+*   **ポーリングループ**（`Poll`）は、`pollInterval` 秒ごとにローカルプレイヤーの位置を再チェックし、これが正となる基準です。トリガーコールバックが取りこぼすケース（コライダーの内側にスポーンした、リスポーンした、テレポートさせられた、コンポーネントが無効化されてから再度有効化された）でも正しく保たれます。
+
+ポーリングは遅延イベントキューを通じて自分自身を再スケジュールするため、**フレームごとの `Update()` コストはありません**。
 
 ---
 
@@ -49,6 +58,7 @@ public class CrZ_ProximityActivator : UdonSharpBehaviour
 | フィールド | 型 | 説明 |
 | :--- | :--- | :--- |
 | `invert` | `bool` | ロジックを反転します。対象は有効な状態で開始し、範囲に入ると **無効化** され、出ると再度有効化されます。既定値: `false`。 |
+| `pollInterval` | `float` | ローカルプレイヤーの位置チェックの間隔（秒）。歩いての出入りはトリガーコールバックが即座に処理するため、このポーリングはスポーン時の内側判定 / リスポーン / テレポートを補完するだけです。`0.25`〜`0.5` で十分です。既定値: `0.25`。 |
 
 ---
 
@@ -56,7 +66,7 @@ public class CrZ_ProximityActivator : UdonSharpBehaviour
 
 ### `OnPlayerTriggerEnter`
 
-VRChat のコールバック。**ローカル** プレイヤーがトリガーに入ると、設定された対象を有効化し（`invert` が `true` の場合は無効化し）、`notifyOnEnter` のイベントを発火します。リモートプレイヤーの場合は無視されます。
+VRChat のコールバック。**ローカル** プレイヤーがトリガーに歩いて入ったときの即時の有効化です。設定された対象を有効化し（`invert` が `true` の場合は無効化し）、`notifyOnEnter` のイベントを発火します。リモートプレイヤーの場合は無視されます。
 
 `public override void OnPlayerTriggerEnter(VRCPlayerApi player)`
 
@@ -70,7 +80,7 @@ VRChat のコールバック。**ローカル** プレイヤーがトリガー�
 
 ### `OnPlayerTriggerExit`
 
-VRChat のコールバック。**ローカル** プレイヤーがトリガーから出ると、設定された対象を無効化し（`invert` が `true` の場合は有効化し）、`notifyOnExit` のイベントを発火します。リモートプレイヤーの場合は無視されます。
+VRChat のコールバック。**ローカル** プレイヤーがトリガーから歩いて出たときの即時の無効化です。設定された対象を無効化し（`invert` が `true` の場合は有効化し）、`notifyOnExit` のイベントを発火します。リモートプレイヤーの場合は無視されます。
 
 `public override void OnPlayerTriggerExit(VRCPlayerApi player)`
 
@@ -82,8 +92,32 @@ VRChat のコールバック。**ローカル** プレイヤーがトリガー�
 
 ---
 
+### `Poll`
+
+`Start` から開始される、自分自身を再スケジュールする位置チェックです。ローカルプレイヤーの位置を読み取り、`Collider.ClosestPoint` でコライダーと照合し、その結果の内／外の状態を適用したうえで、`SendCustomEventDelayedSeconds` により `pollInterval` 秒後に自分自身を再スケジュールします。これが、スポーン時の内側判定・リスポーン・テレポート・再有効化をまたいでスイッチを正しく保つ基準です。重複したり積み重なったりしたループは自動的に解消されるため、ループを起動するために直接呼び出しても安全です。
+
+`public void Poll()`
+
+---
+
+### `RecheckNow`
+
+テレポーターやステーションのスクリプト向けの任意のフックです。`pollInterval` 秒待つのではなく、内／外の再チェックを即座に強制します。プレイヤーを移動させた直後に `SendCustomEvent("RecheckNow")` で呼び出してください。
+
+`public void RecheckNow()`
+
+---
+
 ### `Start`
 
-トリガーコライダーをキャッシュし、初期状態を適用します。ローカルプレイヤーがすでにトリガー内にスポーンしているケースには、`Collider.ClosestPoint` による手動の範囲チェックを 1 回行って対応します。
+トリガーコライダーをキャッシュし、初期状態として「範囲外」を適用し、`Poll` ループを開始します。フレームごとの `Update` はありません。
 
 `public void Start()`
+
+---
+
+### `OnEnable`
+
+`Start` の実行後にコンポーネントが無効化されてから再度有効化された場合に、`Poll` ループを再開します。
+
+`public void OnEnable()`
