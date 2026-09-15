@@ -33,14 +33,21 @@ Rather than one color field per UI element, the Normal version uses a small **se
 
 The locked/unlocked label text itself (`Locked` / `Unlocked`) comes from the `LOCKED_TEXT` / `UNLOCKED_TEXT` constants in the shared `SB_Config` script, so change those directly in the file if you want different wording.
 
+### Button Colors
+
+*   **`Button Background Color`**: The background color of the game menu's buttons.
+*   **`Button Border Color`**: The border color of the game menu's buttons.
+*   **`Button Text Color`**: The text color of the game menu's buttons.
+
 ---
 
 ## Which elements use which color (Advanced)
 
 Each themed panel keeps its **own** list of UI elements (`Image`/`TextMeshProUGUI`, anything that is a `Graphic`) per color role, and applies the matching `SB_ConfigUI` color to all of them:
 
-*   **`SB_GameMenuUI`** (the game menu panel): a **Background Color Elements** list and a **Primary Color Elements** list.
+*   **`SB_GameMenuUI`** (the game menu panel): **Background Color Elements**, **Primary Color Elements**, and **Secondary Color Elements** lists.
 *   **`SB_PlayersManagementUI`** (the players panel): **Background Color Elements**, **Primary Color Elements**, **Secondary Color Elements**, and **Locked State Elements** lists.
 *   **`SB_PlayerCard`** (one card per player): **Secondary Color Elements**, **Background Color Elements**, and **Primary Color Elements** lists, plus the dedicated background/border/icon images described above.
+*   **`SB_ButtonUI`** (one component per game menu button — Enter, Exit, Lock, Reroll, Reset): applies `Button Background Color`, `Button Border Color` and `Button Text Color` to its own **Background**, **Border** and **Text** references.
 
 These lists are already populated on the included prefabs. Only edit them if you're customizing a panel's layout and need a new element to pick up one of the theme colors — drag it into the matching list rather than adding a new color field.

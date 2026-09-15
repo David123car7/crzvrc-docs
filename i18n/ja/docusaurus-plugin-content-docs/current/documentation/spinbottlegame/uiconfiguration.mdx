@@ -33,14 +33,21 @@ Normal バージョンは、UI 要素ごとに 1 つずつ色フィールドを�
 
 ロック状態のラベルテキスト自体（`Locked` / `Unlocked`）は、共有の `SB_Config` スクリプト内の `LOCKED_TEXT` / `UNLOCKED_TEXT` 定数から取得されます。別の表記にしたい場合は、ファイル内でこれらを直接変更してください。
 
+### Button Colors
+
+*   **`Button Background Color`**: ゲームメニューのボタンの背景色です。
+*   **`Button Border Color`**: ゲームメニューのボタンの枠線の色です。
+*   **`Button Text Color`**: ゲームメニューのボタンのテキストの色です。
+
 ---
 
 ## どの要素がどの色を使うか（上級者向け）
 
 テーマ対象の各パネルは、色の役割ごとに **自分専用の** UI 要素リスト（`Image` や `TextMeshProUGUI` など、`Graphic` を継承するもの）を保持しており、対応する `SB_ConfigUI` の色をそれらすべてに適用します。
 
-*   **`SB_GameMenuUI`**（ゲームメニューパネル）: **Background Color Elements** リストと **Primary Color Elements** リスト。
+*   **`SB_GameMenuUI`**（ゲームメニューパネル）: **Background Color Elements**、**Primary Color Elements**、**Secondary Color Elements** の各リスト。
 *   **`SB_PlayersManagementUI`**（プレイヤーパネル）: **Background Color Elements**、**Primary Color Elements**、**Secondary Color Elements**、**Locked State Elements** の各リスト。
 *   **`SB_PlayerCard`**（プレイヤー 1 人につき 1 枚のカード）: **Secondary Color Elements**、**Background Color Elements**、**Primary Color Elements** の各リストに加えて、上で説明した専用の背景／枠線／アイコン画像。
+*   **`SB_ButtonUI`**（ゲームメニューの各ボタンに 1 つずつ付く — 参加、退出、ロック、再抽選、リセット）: `Button Background Color`、`Button Border Color`、`Button Text Color` を、自身の **Background**、**Border**、**Text** の各参照に適用します。
 
 これらのリストは、同梱のプレハブですでに設定済みです。パネルのレイアウトをカスタマイズしていて、新しい要素にテーマカラーの 1 つを適用したい場合にのみ編集してください。新しい色フィールドを追加するのではなく、対応するリストにその要素をドラッグしてください。
