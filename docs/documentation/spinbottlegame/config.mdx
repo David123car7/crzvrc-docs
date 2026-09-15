@@ -1,15 +1,42 @@
-# Configuration 
+---
+sidebar_position: 1
+---
 
-You can easily load your own list of sentences into the game using Pastebin. This allows you to update the game's text dynamically over the internet without needing to re-upload your VRChat world! 
+# Configuration
 
-To set this up, select the **UI** GameObject in your scene hierarchy and locate the `SpinBottleGameText` script in the Inspector.
+Spin Bottle Game ships as **two separate, independently-installable versions** built from the same idea. They are not two modes of one prefab — each has its own game controller script, its own prefabs, and mostly its own scripts:
 
-*   **Create a List:** Go to Pastebin and create a new paste containing all the sentences you want to use, placing each sentence on a new line.
-*   **Get the Raw Link:** Once saved, click the **Raw** button on your Pastebin page. 
-*   **Copy the URL:** Copy the URL from your browser's address bar (it should look something like `https://pastebin.com/raw/...`).
-*   **Link it to Unity:** Paste this raw URL into the **Sentences List Url** field on the `SpinBottleGameText` script.
+*   **Normal** — `SB_SpinBottleGame`. Adds player join/lock management: players must join the game before they can spin, and the game can be locked to stop new joins.
+*   **Lite** — `SBL_SpinBottleGame`. No join step — anyone can walk up and click the bottle to spin, at any time.
 
-Because your sentences are pulled from a live link, you can tell the game how often it should check your Pastebin for new updates.
+| Feature | Normal | Lite |
+| :--- | :---: | :---: |
+| Sentence table, spin animation, Pastebin fetch | ✅ | ✅ |
+| Bottle interaction | ✅ (shared script) | ✅ (shared script) |
+| Player list (join / leave / lock) | ✅ | ❌ |
+| "Owner" role (gates Lock / Reset / Reroll) | ✅ | ❌ |
+| Game menu & players panel theming | ✅ | ❌ |
+| Reset button | ✅ | ❌ |
 
-*   **Reload Delay:** In the `SpinBottleGameText` script, locate the **Reload Delay** field.
-*   **Set the Time:** Enter a value in seconds. For example, entering `600` will command the system to re-fetch the sentence list every 10 minutes.
+The rows only **Normal** has are covered on the [Players Management](./players-management.mdx) and [UI Configuration](./uiconfiguration.mdx) pages. Everything below this point applies to both versions.
+
+---
+
+## General Settings
+
+*   **`Sentence Delay`** (Default: `2`): How long, in seconds, the bottle's spin animation plays before the landed sentence is revealed. This is meant to match the length of the spin animation clip — **do not change it** unless you've also changed the bottle's animation, otherwise the sentence will reveal before (or well after) the animation actually finishes.
+
+---
+
+## Fetch Sentences
+
+You can load your own list of sentences from Pastebin, so you can update the game's text over the internet without re-uploading your VRChat world.
+
+*   **Create a List:** Go to Pastebin and create a new paste with the sentences you want to use, one sentence per line.
+*   **Get the Raw Link:** Once saved, click the **Raw** button on your Pastebin page.
+*   **Copy the URL:** Copy the URL from your browser's address bar (it should look like `https://pastebin.com/raw/...`).
+*   **`Sentences List Url`**: Paste that raw URL here.
+*   **`Reload Delay`** (Default: `300`): How many seconds to wait before re-fetching the Pastebin, so you can update the list without re-uploading your world. For example, `600` re-fetches every 10 minutes.
+
+At each seat around the table, a sentence is picked randomly from the downloaded list. When a seat's sentence is revealed by a spin, that seat is refilled with a new random pick the next time someone spins, trying to avoid repeating a sentence that's already shown elsewhere on the table (it falls back to any random sentence if your list is too small to avoid a repeat).
+

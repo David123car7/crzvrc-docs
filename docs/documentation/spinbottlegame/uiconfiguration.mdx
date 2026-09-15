@@ -1,0 +1,46 @@
+---
+sidebar_position: 2
+---
+
+# UI Configuration
+
+*   **Lite** (`SBL_SpinBottleGame`) and **Normal** (`SB_SpinBottleGame`) both drive the same shared table UI script, `SB_SpinBottleGameUI` — the sentence labels around the table, the display panel, and the "whose turn" name label. It has no colors or styling exposed in the Inspector; its fields are just the text/label references already wired on the included prefabs, so there's nothing to configure here for either version.
+*   **Normal only**: the game menu and players panel (join list, lock state) have a full color theme through `SB_ConfigUI`. **Lite has none of this** — no theming layer, no players panel — since it has no player join/lock feature at all. See [Players Management](./players-management.mdx).
+
+---
+
+## Theme Colors (`SB_ConfigUI`) — Normal only
+
+Rather than one color field per UI element, the Normal version uses a small **semantic palette**: a handful of named colors here, which every themed panel (the game menu, the players panel, and each player card) picks up by reference. Changing a color on this page updates every element using it at once.
+
+### Theme Colors
+
+*   **`Primary Color`**: The game's main accent color.
+*   **`Secondary Color`**: The game's secondary accent color.
+*   **`Background Color`**: The background color used by themed panels.
+
+### Lock State Colors
+
+*   **`Locked Color`**: Applied to the lock-state elements while the game is locked.
+*   **`Unlocked Color`**: Applied to the lock-state elements while the game is unlocked.
+
+### Player Card Settings
+
+*   **`Card Has Border`**: When enabled, each player card shows its border image.
+*   **`Card Has Background`**: When enabled, each player card shows its background image.
+*   **`Icon`**: A sprite shown on a card to mark its player as the **owner**. Only the owner's card shows this icon.
+*   **`Owner Color`**: The tint applied to that owner icon.
+
+The locked/unlocked label text itself (`Locked` / `Unlocked`) comes from the `LOCKED_TEXT` / `UNLOCKED_TEXT` constants in the shared `SB_Config` script, so change those directly in the file if you want different wording.
+
+---
+
+## Which elements use which color (Advanced)
+
+Each themed panel keeps its **own** list of UI elements (`Image`/`TextMeshProUGUI`, anything that is a `Graphic`) per color role, and applies the matching `SB_ConfigUI` color to all of them:
+
+*   **`SB_GameMenuUI`** (the game menu panel): a **Background Color Elements** list and a **Primary Color Elements** list.
+*   **`SB_PlayersManagementUI`** (the players panel): **Background Color Elements**, **Primary Color Elements**, **Secondary Color Elements**, and **Locked State Elements** lists.
+*   **`SB_PlayerCard`** (one card per player): **Secondary Color Elements**, **Background Color Elements**, and **Primary Color Elements** lists, plus the dedicated background/border/icon images described above.
+
+These lists are already populated on the included prefabs. Only edit them if you're customizing a panel's layout and need a new element to pick up one of the theme colors — drag it into the matching list rather than adding a new color field.

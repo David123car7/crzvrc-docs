@@ -1,0 +1,45 @@
+---
+sidebar_position: 3
+---
+
+# Players Management
+
+:::info[Normal version only]
+This page only applies to the **Normal** version (`SB_SpinBottleGame`). The **Lite** version (`SBL_SpinBottleGame`) has no join step and no players panel — anyone can spin the bottle immediately.
+:::
+
+On the Normal version, players must **join** before they can spin. The game tracks up to `PLAYER_CAPACITY` players on a synced players panel, and the first player who joins becomes the **owner** for as long as they stay.
+
+---
+
+## Player Capacity
+
+`PLAYER_CAPACITY` (default `8`) limits how many players can join the game at once — this is the only version where this constant behaves as an actual player limit, since Lite has no join step. It lives in the shared `SB_Config` script; see [Table Size](./config.mdx) on the Configuration page for where to change it.
+
+---
+
+## How it works (`SB_PlayersManagement`)
+
+*   Joined players are tracked in a synced list. The **owner** is whoever occupies the first slot — normally the first player to join. If the owner leaves, the next player in line is promoted to owner automatically.
+*   While the game is **locked**, new players cannot join.
+*   When the last player leaves, the game automatically resets (landed sentence and last player cleared) so it's ready for the next group.
+
+---
+
+## Buttons (`SB_UIInteraction`)
+
+Wire these public methods to your UI buttons' `OnClick` events:
+
+| Method | Description |
+| :--- | :--- |
+| `EnterGame()` | Adds the local player to the game. Wire to a **Join** button. |
+| `ExitGame()` | Removes the local player from the game, resetting the game if they were the last one in it. Wire to a **Leave** button. |
+| `ToggleLockGame()` | Flips the locked state. **Owner-only** — does nothing for any other player. Wire to a **Lock / Unlock** button. |
+| `ChangeText()` | Rerolls every sentence on the table. **Owner-only**. Wire to a **Reroll** button. |
+| `ResetGame()` | Clears the game back to empty (no players, no landed sentence). **Owner-only**. Wire to a **Reset** button. |
+
+---
+
+## UI Styling
+
+The players panel, player cards, and game menu panel are all styled from one shared color theme, `SB_ConfigUI` — see the [UI Configuration](./uiconfiguration.mdx) page.

@@ -1,0 +1,46 @@
+---
+sidebar_position: 2
+---
+
+# UI 設定
+
+*   **Lite**（`SBL_SpinBottleGame`）と **Normal**（`SB_SpinBottleGame`）はどちらも、同じ共有テーブル UI スクリプト `SB_SpinBottleGameUI` を使用します。これはテーブル周りの文章ラベル、表示パネル、「誰の番か」を示す名前ラベルです。Inspector に公開されている色やスタイル設定はなく、そのフィールドは同梱のプレハブにすでに配線済みのテキスト／ラベル参照だけなので、どちらのバージョンでもここで設定する項目はありません。
+*   **Normal のみ**: ゲームメニューとプレイヤーパネル（参加リスト、ロック状態）は、`SB_ConfigUI` による完全なカラーテーマを持っています。**Lite にはこれが一切ありません**（テーマの仕組みもプレイヤーパネルもなし）。プレイヤーの参加・ロック機能自体がないためです。詳しくは [プレイヤー管理](./players-management.mdx) を参照してください。
+
+---
+
+## テーマカラー（`SB_ConfigUI`）— Normal のみ
+
+Normal バージョンは、UI 要素ごとに 1 つずつ色フィールドを持つのではなく、小さな **セマンティックなパレット** を使用します。ここで定義されたいくつかの名前付きの色を、テーマ対象のパネル（ゲームメニュー、プレイヤーパネル、各プレイヤーカード）が参照して使います。このページで色を変更すると、その色を使っているすべての要素が一度に更新されます。
+
+### Theme Colors
+
+*   **`Primary Color`**: ゲームのメインアクセントカラーです。
+*   **`Secondary Color`**: ゲームのセカンダリアクセントカラーです。
+*   **`Background Color`**: テーマ対象のパネルで使われる背景色です。
+
+### Lock State Colors
+
+*   **`Locked Color`**: ゲームがロックされている間、ロック状態の要素に適用されます。
+*   **`Unlocked Color`**: ゲームがロック解除されている間、ロック状態の要素に適用されます。
+
+### Player Card Settings
+
+*   **`Card Has Border`**: 有効にすると、各プレイヤーカードが枠線の画像を表示します。
+*   **`Card Has Background`**: 有効にすると、各プレイヤーカードが背景の画像を表示します。
+*   **`Icon`**: カードの持ち主が **オーナー** であることを示すために表示されるスプライトです。オーナーのカードにのみ表示されます。
+*   **`Owner Color`**: そのオーナーアイコンに適用される色合いです。
+
+ロック状態のラベルテキスト自体（`Locked` / `Unlocked`）は、共有の `SB_Config` スクリプト内の `LOCKED_TEXT` / `UNLOCKED_TEXT` 定数から取得されます。別の表記にしたい場合は、ファイル内でこれらを直接変更してください。
+
+---
+
+## どの要素がどの色を使うか（上級者向け）
+
+テーマ対象の各パネルは、色の役割ごとに **自分専用の** UI 要素リスト（`Image` や `TextMeshProUGUI` など、`Graphic` を継承するもの）を保持しており、対応する `SB_ConfigUI` の色をそれらすべてに適用します。
+
+*   **`SB_GameMenuUI`**（ゲームメニューパネル）: **Background Color Elements** リストと **Primary Color Elements** リスト。
+*   **`SB_PlayersManagementUI`**（プレイヤーパネル）: **Background Color Elements**、**Primary Color Elements**、**Secondary Color Elements**、**Locked State Elements** の各リスト。
+*   **`SB_PlayerCard`**（プレイヤー 1 人につき 1 枚のカード）: **Secondary Color Elements**、**Background Color Elements**、**Primary Color Elements** の各リストに加えて、上で説明した専用の背景／枠線／アイコン画像。
+
+これらのリストは、同梱のプレハブですでに設定済みです。パネルのレイアウトをカスタマイズしていて、新しい要素にテーマカラーの 1 つを適用したい場合にのみ編集してください。新しい色フィールドを追加するのではなく、対応するリストにその要素をドラッグしてください。

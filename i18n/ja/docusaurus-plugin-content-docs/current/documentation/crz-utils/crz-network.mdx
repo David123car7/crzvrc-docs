@@ -41,8 +41,4 @@ public static class CRZ_Network
 | :--- | :--- | :--- |
 | `playerId` | `int` | 検索する VRChat のプレイヤー ID。 |
 
-**戻り値:** そのプレイヤーの `displayName`。
-
-:::warning
-このメソッドは検索結果を null チェックしません。`playerId` に該当するプレイヤーが現在インスタンスにいない場合、`VRCPlayerApi.GetPlayerById` は `null` を返し、`displayName` へのアクセスは例外を投げます。有効だと分かっている ID でのみ呼び出してください（例: `OnPlayerJoined` 内や、まだ追跡中のプレイヤー ID）。
-:::
+**戻り値:** そのプレイヤーの `displayName`。`playerId` に該当するプレイヤーが現在インスタンスにいない場合は、空文字列 `""` を返します。

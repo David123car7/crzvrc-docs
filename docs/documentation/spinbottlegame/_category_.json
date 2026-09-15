@@ -3,6 +3,6 @@
   "position": 4,
   "link": {
     "type": "generated-index",
-    "description": "Spin the Bottle is a mini-game for your world. Players spin a bottle, and when it finally comes to a stop, it selects and displays a sentence."
+    "description": "Spin the Bottle is a mini-game for your world. Players spin a bottle, and when it finally comes to a stop, it selects and displays a sentence. The asset ships in two versions: **Normal**, which adds player join/lock management, and **Lite**, which lets anyone spin immediately with no setup."
   }
 }

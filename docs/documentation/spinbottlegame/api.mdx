@@ -1,0 +1,72 @@
+---
+sidebar_position: 4
+---
+
+# API Reference
+
+The Spin Bottle Game controller exposes public methods you can call from your own Udon scripts — for example, to trigger a spin from a custom interactable instead of the included `SB_Bottle` script.
+
+The **Normal** (`SB_SpinBottleGame`) and **Lite** (`SBL_SpinBottleGame`) versions are separate, unrelated classes, so reference whichever one your world actually uses. Their method shapes match unless noted otherwise below.
+
+:::info
+The included `SB_Bottle` script already calls `TriggerSpin()` (guarded by `IsSpining()`, so a spin can't be double-triggered) whenever a player interacts with the bottle. It talks to the controller through Udon's generic variable/event API rather than a concrete type, so the same script works unmodified with either version — just point its **Spin Bottle Game** field at the correct controller.
+:::
+
+---
+
+## Methods
+
+### `SpinBottle`
+
+Starts a spin: takes ownership, refills the previously-landed seat with a new sentence, records who spun and which seat the bottle will land on, and plays the spin animation.
+
+`public void SpinBottle(int playerId, int index)`
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `playerId` | `int` | VRChat player id of the player triggering the spin. |
+| `index` | `int` | Target seat / sentence slot index (`0`–`PLAYER_CAPACITY - 1`) the bottle will land on. |
+
+:::info[Normal only]
+On the Normal version, this is a no-op if `playerId` has not joined the game (see [Players Management](./players-management.mdx)). The Lite version has no such check — any player id spins immediately.
+:::
+
+---
+
+### `TriggerSpin`
+
+Zero-argument entry point for callers that only hold a generic `UdonSharpBehaviour` reference (like `SB_Bottle`) and can't call `SpinBottle` directly. Spins for the **local player** at a random seat.
+
+`public void TriggerSpin()`
+
+---
+
+### `IsSpining`
+
+Whether a spin is currently in progress.
+
+`public bool IsSpining()`
+
+**Returns:** `true` while the bottle is spinning; otherwise `false`.
+
+---
+
+### `FillGameSentences`
+
+Fills every seat on the table with a fresh random sentence from the downloaded Pastebin pool. Runs automatically once, right after the first successful download — call it again yourself to reroll the whole table on demand. No-op if the sentence pool hasn't loaded yet.
+
+`public void FillGameSentences()`
+
+---
+
+### `ResetGame`
+
+Clears the landed sentence and last spinning player, and (Normal only) empties the players list.
+
+`public void ResetGame()`
+
+:::info[Normal only]
+`ResetGame` exists only on `SB_SpinBottleGame`. The Lite version has no reset method — its table always keeps whatever sentence last landed on each seat.
+:::
