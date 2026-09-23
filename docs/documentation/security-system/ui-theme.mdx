@@ -1,10 +1,10 @@
 ---
-sidebar_position: 5
+sidebar_position: 4
 ---
 
 # Player Management Panel & Theme
 
-The management panel is the main interface security staff use to view and control every player's roles. It's built once at edit time by `SS_SecuritySystemUI`'s custom Inspector (see [Setup](./setup)), and its colors are driven by a separate, shared `SS_ConfigUI` script.
+The management panel is the main interface security staff use to view and control every player's roles. It's built once at edit time by `SS_SecuritySystemUI`'s custom Inspector, and its colors are driven by a separate, shared `SS_ConfigUI` script.
 
 ---
 
@@ -39,4 +39,4 @@ Changing a color on `SS_ConfigUI` updates every already-built player card and ro
 
 ## Wiring a Card's Theme
 
-Player cards and role cards are built once at edit time and can't hold a direct reference to `SS_ConfigUI` on the prefab itself (a prefab asset can't reference a scene object) — that link is set automatically by `SS_SecuritySystemUI`'s custom Inspector on each instantiated copy. In normal use you don't need to wire this by hand; it's handled the moment you assign **Config UI** on `SS_SecuritySystemUI` (see [Setup](./setup)).
+Player cards and role cards are built once at edit time and can't hold a direct reference to `SS_ConfigUI` on the prefab itself (a prefab asset can't reference a scene object) — that link is set automatically by `SS_SecuritySystemUI`'s custom Inspector on each instantiated copy, from the **Config UI** field on `SS_SecuritySystemUI`. The included prefab ships with this already wired, so you only need to think about it if you rebuild the panel on a custom setup of your own.

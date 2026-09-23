@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+sidebar_position: 1
 ---
 
 # Assignment Methods
@@ -69,10 +69,21 @@ A role flagged **Persistent** is remembered for the rest of the instance: if a p
 
 The URL-fetched whitelist can optionally be stored **encrypted** at its source instead of as plain readable text, and automatically decrypted by the world using a shared key you configure. This keeps a remote player/role list from being readable by anyone who finds the link, while the world still uses it normally.
 
-* Enable **Encrypt Remote Strings** on `SS_SecuritySystem`, and set the same **Encryption Key** on every client that needs to decrypt it (this value isn't synced — everyone needs their own copy configured in the Editor).
+### How It Works
+
+1. **Choose an encryption key.** This is just a word or phrase you make up yourself — there's no key generator or format requirement. Keep it private, since anyone who has it can decrypt your whitelist.
+2. **Write your whitelist as plain text**, exactly like the unencrypted version: one `playerName, role` pair per line.
+3. **Encrypt that text using your chosen key**, with the Encryption Tool described below. The plain `playerName, role` lines go in, and the encrypted text comes out.
+4. **Upload the encrypted text** to your pastebin (or wherever your **User List URL** points), replacing the plain-text version entirely — the whitelist your world fetches is now the encrypted text, not the original lines.
+5. **Enter that same key** in the **Encryption Key** field on `SS_SecuritySystem`, and enable **Encrypt Remote Strings**. The world then fetches the encrypted text and decrypts it locally with that key, turning it back into the original `playerName, role` list before reading it as a whitelist.
+
+:::warning
+The key you encrypt with in step 3 and the **Encryption Key** you configure in step 5 must match **exactly** — this is a simple shared-key cipher, not a certificate-based system, so there's no separate public/private key pair. A mismatched key doesn't fail cleanly; it just decrypts into garbage, and no player will match your whitelist.
+:::
+
 * Only reliable for plain player and role names — not intended for arbitrary text.
 * The whole multi-line list is encrypted as a single block, so the encrypted result is always one long unbroken line even though the original had several lines — this is expected.
 
 :::tip Encryption Tool
-You don't need to write the cipher yourself. In the Unity Editor, open **CrZVRC → Security System → Encryption Tool**. Enter the same key configured on your Security System, paste your plain `playerName, role` lines, and click **Encrypt** — then upload the result to your pastebin in place of the plain text. The same window can also **Decrypt** to check your work.
+You don't need to write the cipher yourself. In the Unity Editor, open **CrZVRC → Security System → Encryption Tool**. Enter your chosen key, paste your plain `playerName, role` lines, and click **Encrypt** — then upload the result to your pastebin in place of the plain text. The same window can also **Decrypt** a piece of encrypted text back to plain lines, to check your work.
 :::
