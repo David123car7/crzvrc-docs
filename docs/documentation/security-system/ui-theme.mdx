@@ -31,7 +31,7 @@ The management panel is the main interface security staff use to view and contro
 
 Each color also has a list of which UI elements it applies to, wired directly on `SS_ConfigUI` for its own elements, and separately on each `SS_PlayerCard` / `SS_RoleCard` prefab for their own per-instance elements (since a card is instantiated many times, it can't share a single element list with the others).
 
-:::tip Live Preview
+:::tip[Live Preview]
 Changing a color on `SS_ConfigUI` updates every already-built player card and role card immediately in the Unity Editor — no need to enter Play mode to see it. If a color ever doesn't seem to apply, the **Apply Colors** button on `SS_ConfigUI`'s Inspector re-applies everything on demand.
 :::
 
