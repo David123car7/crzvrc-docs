@@ -1,0 +1,55 @@
+---
+sidebar_position: 4
+---
+
+# Actions & Notifications
+
+Roles can be wired to automatically do things in the world the moment they're granted or revoked from a player — teleporting them, playing an animation, or showing/hiding objects. This binding happens on `SS_RolesManagement`, in its **Role Actions** list, separate from the Roles list itself: any number of actions can be attached to a single role's grant or revoke, with no per-role limit.
+
+---
+
+## Action Types
+
+Three action scripts ship with the Security System, each placed on its own GameObject and referenced from a Role Actions binding:
+
+* **`SS_Action_Teleport`** — Teleports the affected player to a configured **Destination** transform.
+* **`SS_Action_ToggleObjects`** — Enables one set of GameObjects and disables another. Has an **Objects Enabled On Grant** list and an **Objects Disabled On Grant** list; when the same binding fires for a revoke instead, the effect automatically reverses (what was shown on grant is hidden on revoke, and vice versa) — you don't need a second binding for the revoke case.
+* **`SS_Action_AnimationTrigger`** — Fires a named **Trigger** parameter on a configured **Animator**. This is a world effect rather than a player-specific one, so it runs identically for everyone regardless of who the role change affected.
+
+---
+
+## Binding an Action to a Role
+
+On `SS_RolesManagement`, each entry in the **Role Actions** list has:
+
+| Field | Description |
+| :--- | :--- |
+| **Role** | Which role this binding fires for. |
+| **On Granted / On Revoked** | Whether this binding fires when the role is granted or when it's revoked. |
+| **Action Target** | The action script (`SS_Action_Teleport`, `SS_Action_ToggleObjects`, or `SS_Action_AnimationTrigger`) to run. |
+
+Add one entry per action you want to trigger — a single role can have several bindings covering both its grant and its revoke.
+
+:::info
+Teleport and Toggle Objects actions only affect the player whose role actually changed, even though the underlying event runs on every connected client — each one filters to "is this my own local player?" before doing anything.
+:::
+
+---
+
+## For Developers
+
+Every action script also exposes a typed `ExecuteLocal(VRCPlayerApi forPlayer)` overload, in addition to the parameterless one the role system calls internally. This lets another script — for example a compatible **Admin Tablet** — trigger the exact same teleport, toggle, or animation directly, without going through a role grant/revoke at all. If you're building your own integration, call this overload with a typed reference to the action rather than trying to fire a role event.
+
+---
+
+## Notifications (Optional)
+
+If the **Notification System** asset is also present in your world, the Security System can show a small on-screen alert to a player when they personally receive or lose a role, using that role's name and color.
+
+To enable it:
+
+1. Add an `SS_Notifications` script, and assign its **Notification System** field to your world's `NS_NotificationSystem` object.
+2. On `SS_SecuritySystem`, assign the **Notifications** field to that `SS_Notifications` object and enable **Notifications Enabled**.
+3. Customize the **Role Granted** and **Role Revoked** message text, text color, and icon on `SS_Notifications` — the role's own name and color are always used as the notification's subtext and accent.
+
+This integration is entirely optional — the Security System works fine, with no errors, if the Notification System isn't installed.

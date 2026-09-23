@@ -1,0 +1,64 @@
+---
+sidebar_position: 3
+---
+
+# The Security Keypad
+
+The `SecurityKeypad` prefab is a physical, interactable in-world keypad. A player walks up, presses numbered buttons to enter a role's password, and the system automatically checks it once enough digits are entered — there's no separate submit button.
+
+---
+
+## How It Works
+
+* **Numeric buttons (0–9)**, a **clear-all** key, and a **backspace** key.
+* Entry is a **4-digit password** (`SS_Config.KEYPAD_PASSWORD_LENGTH`), checked automatically the moment the 4th digit is entered.
+* If the password matches a role the player doesn't have, it's **granted**.
+* If the player already holds that role **temporarily**, entering its password again **removes it instead** — the keypad doubles as a logout. A role held **permanently** (whitelisted, instance owner, or granted permanently via **Keypad Permanent**) can't be removed this way, and re-entering its password is indistinguishable from a wrong password.
+* The result is shown on the keypad's small display: the role's name and whether it was **"Granted"** or **"Removed"**, in that role's color, or **"Access Denied"** in red — then clears automatically after a few seconds.
+* A sound plays on every key press, and a separate sound plays when a password is rejected or the keypad is rate-limited.
+
+:::info
+Keypad passwords are assumed **unique per role**. If two roles are accidentally given the same password, only whichever comes first in the Roles list is ever reachable from the keypad.
+:::
+
+---
+
+## Rate Limiting
+
+Each keypad has a configurable limit on how many wrong passwords it accepts within a rolling one-minute window before it temporarily refuses to check any more attempts, showing **"Too Many Attempts"** instead.
+
+* This tracking is **per keypad and per player** — getting blocked on one keypad doesn't lock out other players, or lock you out of a different keypad elsewhere in the world.
+* The one-minute window starts counting from the *first* wrong attempt, and resets automatically once a minute has passed since then.
+* Entering a correct password does **not** reset the counter — this is deliberate, so a player who knows even one valid password can't use it to clear the counter and keep guessing at a password they don't know.
+
+---
+
+## Inspector Reference
+
+### `SS_SecurityKeypad`
+
+| Field | Description |
+| :--- | :--- |
+| **Security System** | The `SS_SecuritySystem` this keypad grants/revokes roles through. |
+| **UI** | The `SS_SecurityKeypadUI` component driving this keypad's display. |
+| **Audio Source** | Source used to play the keypad's sound effects. |
+| **Key Press Sound** | Played on every key press, digit or special. |
+| **Access Denied Sound** | Played on a wrong password *and* on a rate-limit block. |
+| **Max Password Attempts Per Minute** | Number of failed attempts allowed in a minute before this keypad blocks further checks (default `5`). |
+
+### `SS_SecurityKeypadUI`
+
+| Field | Description |
+| :--- | :--- |
+| **Display** | The text element showing entered digits and results. |
+| **Access Denied Text** | Text shown for a wrong password (default `"Access Denied"`). |
+| **Blocked Text** | Text shown when rate-limited (default `"Too Many Attempts"`). |
+| **Denied Color** | Color used for denied/blocked messages (default red). |
+| **Default Color** | Color used for entered digits (default white). |
+| **Result Display Seconds** | How long a result message stays on screen before clearing (default `3`). |
+
+---
+
+:::tip
+Multiple keypads can share the same `SS_SecuritySystem` — each one has its own rate limit, sounds, and display, but they all grant/revoke against the same role state.
+:::
