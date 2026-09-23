@@ -1,0 +1,42 @@
+---
+sidebar_position: 5
+---
+
+# Player Management Panel & Theme
+
+The management panel is the main interface security staff use to view and control every player's roles. It's built once at edit time by `SS_SecuritySystemUI`'s custom Inspector (see [Setup](./setup)), and its colors are driven by a separate, shared `SS_ConfigUI` script.
+
+---
+
+## The Panel
+
+* A live list of every player currently in the world, each shown as a card with their name, platform (**VR** or **Desktop**), and one toggle per role.
+* A **search box** that filters the player list by name — leave it empty to show everyone.
+* Updates automatically as players join, leave, or have their roles changed by anyone, without needing to reopen or refresh anything.
+* Toggling a role for a player who doesn't currently have permission to grant/revoke (see [Security Permission](./roles#security-permission)) simply snaps back to its previous state.
+
+---
+
+## Theme Colors
+
+`SS_ConfigUI` holds five colors used across the panel, the player cards, and the role columns:
+
+| Color | Purpose |
+| :--- | :--- |
+| **Primary Color** | Main accent color. |
+| **Secondary Color** | Secondary accent color. |
+| **Background Color** | Base panel background. |
+| **Border Color** | Panel and card borders. |
+| **Theme Color** | A per-world accent color, meant to be the one you change to match your world's own look — the other four are treated as fixed structural colors. |
+
+Each color also has a list of which UI elements it applies to, wired directly on `SS_ConfigUI` for its own elements, and separately on each `SS_PlayerCard` / `SS_RoleCard` prefab for their own per-instance elements (since a card is instantiated many times, it can't share a single element list with the others).
+
+:::tip Live Preview
+Changing a color on `SS_ConfigUI` updates every already-built player card and role card immediately in the Unity Editor — no need to enter Play mode to see it. If a color ever doesn't seem to apply, the **Apply Colors** button on `SS_ConfigUI`'s Inspector re-applies everything on demand.
+:::
+
+---
+
+## Wiring a Card's Theme
+
+Player cards and role cards are built once at edit time and can't hold a direct reference to `SS_ConfigUI` on the prefab itself (a prefab asset can't reference a scene object) — that link is set automatically by `SS_SecuritySystemUI`'s custom Inspector on each instantiated copy. In normal use you don't need to wire this by hand; it's handled the moment you assign **Config UI** on `SS_SecuritySystemUI` (see [Setup](./setup)).

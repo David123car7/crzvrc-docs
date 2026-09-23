@@ -1,0 +1,78 @@
+---
+sidebar_position: 2
+---
+
+# Assignment Methods
+
+There are several ways a role can reach a player. Which one applies depends entirely on how you configure the role — most of these can be mixed and matched on the same role.
+
+---
+
+## Manual (In-World Panel)
+
+Security staff can toggle any role on or off for any player currently in the world, directly from the management panel's list of player cards.
+
+Roles granted this way are always **temporary** — they can be taken away again from the same panel — unless the role is flagged **Persistent**, in which case a player who leaves and rejoins the same instance gets it back automatically.
+
+Granting or revoking from the panel requires the acting player to hold a role flagged **Is Security** themselves — see [Security Permission](./roles#security-permission).
+
+---
+
+## Whitelist
+
+A role can be configured to come with a list of specific players, matched by their VRChat display name. A whitelisted player receives the role the moment they join, and roles granted this way are always **permanent** — they can't be removed from the panel while the player remains whitelisted for them.
+
+There are two whitelist sources, and they share the exact same matching logic:
+
+* **Manual list.** Entered directly in the Unity Inspector on `SS_SecuritySystem`, as `playerName` / role pairs.
+* **URL-fetched list.** Pulled from an external plain-text file (such as a Pastebin) at `userListUrl`, formatted one `playerName, role` line per player. The list is fetched once, automatically, when the world loads — only the object's owner downloads it. A role only accepts URL-fetched entries if it has **Use URL Whitelist** enabled; manually-typed entries aren't gated by this flag.
+
+:::info
+A player who's already in the world when the URL fetch finishes (including the instance owner, who joins before the fetch could possibly resolve) is automatically rechecked against the whitelist once it arrives — you don't need them to rejoin.
+:::
+
+---
+
+## Instance Owner
+
+Any role can be flagged **For Instance Owner** to automatically and permanently go to whoever created the current world instance, regardless of whether their name appears on any whitelist.
+
+---
+
+## Security Keypad
+
+A physical in-world keypad where a player types a numeric password. If it matches a role they don't have, that role is granted. Full keypad behavior, including rate limiting and the display, is covered on the [Keypad](./keypad) page — the short version:
+
+* Granted this way, a role is **temporary by default**, same as a manual panel grant — unless the role has **Keypad Permanent** enabled, in which case it's granted **permanently** instead.
+* **Also works as a logout.** Typing the password of a temporary role you already hold removes it instead of granting it again. A permanently-held role (whitelisted, instance owner, or permanent-via-keypad) can't be removed this way.
+
+---
+
+## Two-Factor Roles
+
+A role flagged **Two Factor** requires **both** of the following — neither alone is enough:
+
+* Being listed on the whitelist for that role (manual or URL-fetched, either counts), **and**
+* Entering that role's correct keypad password.
+
+Being whitelisted for a Two Factor role never auto-grants it on join — the player still has to enter the password on a keypad. Likewise, entering the correct password for a Two Factor role a player isn't whitelisted for grants nothing. This gate only applies to the whitelist auto-grant and the keypad — the instance-owner auto-grant and a manual panel grant are unaffected and work on a Two Factor role exactly as on any other role.
+
+---
+
+## Persistence
+
+A role flagged **Persistent** is remembered for the rest of the instance: if a player holds it temporarily (from the panel or the keypad) and then leaves, they get it back automatically if they rejoin the *same* world instance. This memory resets once the instance closes, and never applies to permanent roles — those are simply re-granted on every join anyway.
+
+---
+
+## Encryption
+
+The URL-fetched whitelist can optionally be stored **encrypted** at its source instead of as plain readable text, and automatically decrypted by the world using a shared key you configure. This keeps a remote player/role list from being readable by anyone who finds the link, while the world still uses it normally.
+
+* Enable **Encrypt Remote Strings** on `SS_SecuritySystem`, and set the same **Encryption Key** on every client that needs to decrypt it (this value isn't synced — everyone needs their own copy configured in the Editor).
+* Only reliable for plain player and role names — not intended for arbitrary text.
+* The whole multi-line list is encrypted as a single block, so the encrypted result is always one long unbroken line even though the original had several lines — this is expected.
+
+:::tip Encryption Tool
+You don't need to write the cipher yourself. In the Unity Editor, open **CrZVRC → Security System → Encryption Tool**. Enter the same key configured on your Security System, paste your plain `playerName, role` lines, and click **Encrypt** — then upload the result to your pastebin in place of the plain text. The same window can also **Decrypt** to check your work.
+:::

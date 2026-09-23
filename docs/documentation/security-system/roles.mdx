@@ -1,0 +1,66 @@
+---
+sidebar_position: 1
+---
+
+# Roles
+
+Roles are the core building block of the Security System. Each role has a name, a color, and a set of behaviors you configure once in the Editor — they can't be created or redefined while the world is running, only *assigned* to players at runtime.
+
+Roles are defined on the `SS_RolesManagement` script, using a reorderable list in the Inspector. You can define **up to 32 roles per world** — see [Constants](#constants-ss_config) below for why.
+
+---
+
+## Defining a Role
+
+Each entry in the Roles list on `SS_RolesManagement` has the following fields:
+
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| **Role Name** | `string` | The role's display name. Used throughout the UI, notifications, and by other scripts querying roles by name. |
+| **Child Role** | Role popup | The role this one requires — granting this role also grants its child, and its child's child, and so on. `None` for no requirement. See [Role Hierarchy](#role-hierarchy-parentchild) below. |
+| **Password** | `string` | The 4-digit keypad password for this role. Blank means the role can't be granted from a keypad. Case sensitive. |
+| **Persistent** | `bool` | If a player holds this role temporarily and leaves, they get it back automatically if they rejoin the *same* instance. Never applies to permanent holds (whitelist, instance owner) — those are re-granted on join anyway. |
+| **Two Factor** | `bool` | Requires **both** a whitelist entry **and** the correct keypad password before the role is actually granted — neither alone is enough. |
+| **Keypad Permanent** | `bool` | If enabled, granting this role from the keypad makes it permanent (unrevocable from the panel or keypad) instead of the usual temporary grant. |
+| **Is Security** | `bool` | Whether holding this role counts as "security" — required to grant or revoke *any* role for *any* player from the management panel. |
+| **Login Sound** | `AudioClip` | Played through the shared login audio source when a player holding this role (as their most senior held role) joins. |
+| **Color** | `Color` | Used in the role list UI, in notifications, and on the keypad's result text. |
+| **Spawn Point** | `Transform` | Where a player holding this role is teleported to on join. |
+| **Use URL Whitelist** | `bool` | Whether entries for this role, fetched from the whitelist URL, are accepted. Doesn't affect manually-typed whitelist entries. |
+| **For Instance Owner** | `bool` | Automatically and permanently granted to whoever created the current world instance. |
+
+:::warning
+Whitelist entries (manual and URL-fetched) reference roles **by name**, not by index. If you rename a role, any existing whitelist entries referencing the old name silently stop matching — the Inspector flags an orphaned entry with `(missing)`, but nothing fixes it automatically. Reordering or removing roles is handled safely and doesn't need any manual fixup.
+:::
+
+---
+
+## Role Hierarchy (Parent/Child)
+
+A role's **Child Role** points at, at most, one other role, forming a chain rather than a tree — each role has at most one child.
+
+* **Granting a role cascades down** the chain: granting "Security" (which requires "Access") automatically grants "Access" too if the player doesn't already have it. Only the originally granted role can become permanent from this grant — a child pulled in by the cascade is always temporary, even when the top-level grant is permanent.
+* **Revoking a role cascades up**: a role can never be held without what it requires, so revoking "Access" also revokes "Security" (and anything else that in turn required "Security"). Revoking "Security" does **not** revoke "Access" — "Access" can exist on its own.
+* **All-or-nothing on permanence.** If satisfying the cascade would require revoking a *permanent* role (whitelisted, instance owner, or permanent-via-keypad), the entire removal is refused instead — nothing changes, not even the role you originally asked to revoke.
+* **Nothing stops granting a child role directly.** A role's Child Role setting only governs what happens on grant/revoke cascades, not who's eligible to hold it — any role can be toggled on for a player from the panel without them holding its parent.
+
+---
+
+## Security Permission
+
+A role flagged **Is Security** allows anyone holding it to grant or revoke roles from the management panel — a player with no Security role can view the panel, but their toggles won't do anything.
+
+Because the panel itself requires a Security role to use, the very first Security-holding player in a fresh world has to receive it some other way: the whitelist, the instance-owner auto-grant, or the keypad. Logging yourself out of your own temporary role via the keypad is the one exception that doesn't require holding a Security role — that's self-service and works regardless.
+
+---
+
+## Constants (`SS_Config`)
+
+A few global limits are defined as constants on the `SS_Config` script rather than exposed in the Inspector. To change them, open the script directly and edit the values in code.
+
+* **`PLAYER_CAPACITY`** (default `40`): The maximum number of players the Security System can track and synchronize at once. If your world's VRChat instance capacity can exceed 40, increase this to match.
+* **`KEYPAD_PASSWORD_LENGTH`** (`4`): The number of digits a keypad password requires before it's automatically checked.
+
+:::warning
+Player roles are stored as a **32-bit bitmask**, so a world can define at most **32 roles**. Defining more than 32 in the Roles list raises an error in the Inspector — roles past index 31 simply can't be granted.
+:::

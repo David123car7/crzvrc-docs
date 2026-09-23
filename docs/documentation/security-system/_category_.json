@@ -1,0 +1,8 @@
+{
+  "label": "Security System",
+  "position": 11,
+  "link": {
+    "type": "generated-index",
+    "description": "A full role and permissions system for VRChat worlds. World owners define named roles (Admin, Security, VIP, etc.), and players can receive those roles by hand, by whitelist, as the instance owner, or by entering a password on an in-world keypad — with each role able to trigger teleports, animations, and object toggles automatically when granted or revoked."
+  }
+}
